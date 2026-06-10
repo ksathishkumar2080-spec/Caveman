@@ -208,7 +208,7 @@ export default function Home() {
   };
 
   const hasMessages = messages.length > 0;
-  const PANEL_H = "76vh";
+  const PANEL_H = "84vh";
 
   return (
     <main className="min-h-screen bg-black text-white overflow-x-hidden" style={F}>
@@ -220,7 +220,7 @@ export default function Home() {
       <section
         ref={toolRef}
         id="tool"
-        className="bg-black px-4 md:px-10 lg:px-16 py-16"
+        className="bg-black px-4 md:px-10 lg:px-16 py-8"
       >
         {/* Section label */}
         <p className="text-center text-[10px] uppercase tracking-[0.22em] mb-8"
@@ -287,34 +287,31 @@ export default function Home() {
               )}
             </div>
 
-            {/* Example chips */}
-            <div className="px-4 pt-2.5 flex flex-wrap gap-1.5 shrink-0">
-              <span className="text-[10px] uppercase tracking-[0.12em] self-center mr-0.5"
-                    style={{ ...F, color: "rgba(255,255,255,0.18)" }}>Try:</span>
-              {EXAMPLES.map((ex, i) => (
-                <button key={i} onClick={() => loadExample(ex)}
-                  className="text-[10px] px-2.5 py-1 rounded-full transition-all duration-200"
-                  style={{
-                    ...F,
-                    color: "rgba(255,255,255,0.28)",
-                    border: "1px solid rgba(255,255,255,0.08)",
-                  }}
-                  onMouseEnter={e => {
-                    e.currentTarget.style.color = "rgba(255,255,255,0.6)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)";
-                  }}
-                  onMouseLeave={e => {
-                    e.currentTarget.style.color = "rgba(255,255,255,0.28)";
-                    e.currentTarget.style.borderColor = "rgba(255,255,255,0.08)";
-                  }}>
-                  Example {i + 1}
-                </button>
-              ))}
-            </div>
+            {/* ── Compact input footer ── */}
+            <div className="shrink-0 px-3 pb-3 pt-2"
+                 style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
 
-            {/* Input bar */}
-            <div className="px-4 pb-4 pt-2 shrink-0">
-              <div className="flex items-end gap-2.5 rounded-xl px-4 py-3"
+              {/* chips + meta row */}
+              <div className="flex items-center gap-1.5 mb-2">
+                <span className="text-[9px] uppercase tracking-[0.12em] shrink-0"
+                      style={{ ...F, color: "rgba(255,255,255,0.16)" }}>Try:</span>
+                {EXAMPLES.map((ex, i) => (
+                  <button key={i} onClick={() => loadExample(ex)}
+                    className="text-[9px] px-2 py-0.5 rounded-full transition-all duration-150 shrink-0"
+                    style={{ ...F, color: "rgba(255,255,255,0.25)", border: "1px solid rgba(255,255,255,0.07)" }}
+                    onMouseEnter={e => { e.currentTarget.style.color = "rgba(255,255,255,0.55)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)"; }}
+                    onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.25)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; }}>
+                    {i + 1}
+                  </button>
+                ))}
+                <span className="ml-auto text-[9px] shrink-0"
+                      style={{ ...F, color: "rgba(255,255,255,0.12)" }}>
+                  {input.trim() ? `~${Math.ceil(input.trim().split(/\s+/).length * 1.3)} tokens` : "⌘↵ to send"}
+                </span>
+              </div>
+
+              {/* textarea + send */}
+              <div className="flex items-end gap-2 rounded-xl px-3 py-2"
                    style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
                 <textarea
                   ref={textareaRef}
@@ -323,35 +320,18 @@ export default function Home() {
                   onKeyDown={handleKey}
                   placeholder="Paste your sales prompt…"
                   rows={1}
-                  className="flex-1 bg-transparent outline-none resize-none text-[13px]
-                             leading-[1.65] font-light"
-                  style={{
-                    ...F,
-                    color: "rgba(255,255,255,0.78)",
-                    minHeight: "22px",
-                    maxHeight: "150px",
-                  }}
+                  className="flex-1 bg-transparent outline-none resize-none text-[13px] leading-[1.6] font-light"
+                  style={{ ...F, color: "rgba(255,255,255,0.78)", minHeight: "20px", maxHeight: "100px" }}
                 />
                 <button onClick={handleSend} disabled={!input.trim()}
-                  className="shrink-0 w-7 h-7 rounded-full flex items-center justify-center
-                             transition-all duration-200"
+                  className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200"
                   style={{
-                    background: input.trim() ? "#fff" : "rgba(255,255,255,0.08)",
-                    color: input.trim() ? "#000" : "rgba(255,255,255,0.2)",
+                    background: input.trim() ? "#fff" : "rgba(255,255,255,0.07)",
+                    color: input.trim() ? "#000" : "rgba(255,255,255,0.18)",
                     cursor: input.trim() ? "pointer" : "not-allowed",
                   }}>
-                  <ArrowUp size={13} strokeWidth={2.5} />
+                  <ArrowUp size={11} strokeWidth={2.5} />
                 </button>
-              </div>
-              <div className="flex justify-between px-1 mt-1.5">
-                <span className="text-[10px]"
-                      style={{ ...F, color: "rgba(255,255,255,0.14)" }}>
-                  {input.trim() ? `~${Math.ceil(input.trim().split(/\s+/).length * 1.3)} tokens` : ""}
-                </span>
-                <span className="text-[10px]"
-                      style={{ ...F, color: "rgba(255,255,255,0.12)" }}>
-                  ⌘↵ to send
-                </span>
               </div>
             </div>
           </div>
