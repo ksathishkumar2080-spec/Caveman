@@ -1,0 +1,1 @@
+- [Next.js dev quirks](nextjs-dev-quirks.md) — transient clientReferenceManifest 500 is a dev bug; restart the workflow, don't rewrite code. Also build OOM + allowedDevOrigins notes.

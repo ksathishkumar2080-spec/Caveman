@@ -4,21 +4,12 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { compress } from "../lib/compress";
 import HeroSection from "./HeroSection";
 import { Copy, Check, Zap, ChevronDown } from "lucide-react";
-import StatsSection from "./StatsSection";
 import ChatInput from "./ChatInput";
 
-const RULES = [
-  { code: "R1", name: "Drop articles",        desc: "Remove a, an, the → zero semantic loss" },
-  { code: "R2", name: "Drop politeness",       desc: "please, could you, I'd like → removed" },
-  { code: "R3", name: "Drop scaffolding",      desc: "'In this task', 'For context' → removed" },
-  { code: "R4", name: "Compress verb phrases", desc: "'provide me with a list of' → list:" },
-  { code: "R5", name: "Abbreviate tech",       desc: "auth, config, docs, DB, JS, TS…" },
-  { code: "R6", name: "Collapse redundancy",   desc: "Repeated constraints → stripped" },
-  { code: "R7", name: "Flatten conditionals",  desc: "'if not too much trouble' → removed" },
-  { code: "R8", name: "Preserve critical",     desc: "Negations, numbers, formats → kept" },
-];
-
 const F = { fontFamily: "var(--font-inter)" };
+
+const VIDEO_SRC =
+  "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260429_114316_1c7889ad-2885-410e-b493-98119fee0ddb.mp4";
 
 /* ─── Message bubbles ──────────────────────────────────────── */
 function UserBubble({ text }) {
@@ -113,43 +104,6 @@ function AiBubble({ result, onCopy, copied }) {
   );
 }
 
-/* ─── Rules sidebar ────────────────────────────────────────── */
-function RulesSidebar() {
-  return (
-    <div className="liquid-glass rounded-2xl flex flex-col h-full overflow-hidden"
-         style={{ border: "1px solid rgba(255,255,255,0.07)" }}>
-      <div className="px-4 py-3.5 shrink-0"
-           style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
-        <p className="text-[10px] uppercase tracking-[0.2em]"
-           style={{ ...F, color: "rgba(255,255,255,0.25)" }}>
-          Compression rules
-        </p>
-      </div>
-      <div className="overflow-y-auto flex-1 p-3 space-y-1.5"
-           style={{ scrollbarWidth: "none" }}>
-        {RULES.map(({ code, name, desc }) => (
-          <div key={code}
-               className="rounded-xl p-3 transition-all duration-200"
-               style={{ border: "1px solid rgba(255,255,255,0.05)" }}
-               onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
-               onMouseLeave={e => e.currentTarget.style.background = "transparent"}>
-            <div className="flex items-start gap-2.5">
-              <span className="text-[10px] tabular-nums mt-0.5 shrink-0"
-                    style={{ ...F, color: "rgba(255,255,255,0.2)" }}>{code}</span>
-              <div>
-                <p className="text-[12px] font-medium mb-0.5"
-                   style={{ ...F, color: "rgba(255,255,255,0.6)" }}>{name}</p>
-                <p className="text-[11px] leading-snug font-light"
-                   style={{ ...F, color: "rgba(255,255,255,0.25)" }}>{desc}</p>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
-
 /* ─── Main page ────────────────────────────────────────────── */
 export default function Home() {
   const [messages, setMessages]   = useState([]);
@@ -181,73 +135,49 @@ export default function Home() {
   const hasMessages = messages.length > 0;
 
   return (
-    <main className="min-h-screen bg-black text-white overflow-x-hidden" style={F}>
+    <main className="relative min-h-screen text-white overflow-x-hidden" style={F}>
 
-      {/* ══ HERO ════════════════════════════════════════════════ */}
-      <HeroSection onScrollToTool={scrollToTool} />
+      {/* ══ FIXED VIDEO BACKGROUND ══════════════════════════════ */}
+      <div className="fixed inset-0 z-0 pointer-events-none">
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="auto"
+          src={VIDEO_SRC}
+          onLoadedMetadata={(e) => { e.currentTarget.playbackRate = 1.2; }}
+        />
+        <div className="absolute inset-0 bg-black/55" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/40 via-transparent to-black/70" />
+      </div>
 
-      {/* ══ STATS / INFO ════════════════════════════════════════ */}
-      <StatsSection />
+      {/* ══ PAGE CONTENT ════════════════════════════════════════ */}
+      <div className="relative z-10 flex flex-col min-h-screen">
 
-      {/* ══ TOKEN COUNTER ═══════════════════════════════════════ */}
-      {(() => {
-        const aiMsgs = messages.filter(m => m.type === "ai");
-        const totalIn  = aiMsgs.reduce((s, m) => s + (m.result?.inputTokens  ?? 0), 0);
-        const totalOut = aiMsgs.reduce((s, m) => s + (m.result?.outputTokens ?? 0), 0);
-        const saved    = totalIn - totalOut;
-        const pct      = totalIn > 0 ? Math.round((saved / totalIn) * 100) : 0;
-        const active   = aiMsgs.length > 0;
-        return (
-          <div className="bg-black px-5 md:px-10 lg:px-16 pb-6">
-            <div className="max-w-5xl mx-auto">
-              <div className="flex items-center gap-6 rounded-xl px-5 py-3.5 flex-wrap"
-                   style={{ border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
-                <div className="flex items-center gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full"
-                       style={{ background: active ? "rgba(134,239,172,0.7)" : "rgba(255,255,255,0.12)",
-                                boxShadow: active ? "0 0 6px rgba(134,239,172,0.4)" : "none",
-                                transition: "all .4s" }} />
-                  <span className="text-[10px] uppercase tracking-[0.16em]"
-                        style={{ ...F, color: "rgba(255,255,255,0.2)" }}>
-                    Session token counter
-                  </span>
-                </div>
-                <div className="flex items-center gap-5 ml-auto flex-wrap">
-                  {[
-                    { label: "Tokens in",   val: totalIn.toLocaleString(),  color: "rgba(255,255,255,0.45)" },
-                    { label: "Tokens out",  val: totalOut.toLocaleString(), color: "rgba(255,255,255,0.45)" },
-                    { label: "Saved",       val: saved > 0 ? saved.toLocaleString() : "—", color: "rgba(134,239,172,0.8)" },
-                    { label: "Reduction",   val: active ? `${pct}%` : "—",  color: "rgba(134,239,172,0.8)" },
-                  ].map(({ label, val, color }) => (
-                    <div key={label} className="flex items-baseline gap-1.5">
-                      <span className="text-[10px]" style={{ ...F, color: "rgba(255,255,255,0.18)" }}>{label}</span>
-                      <span className="text-[13px] font-light tabular-nums" style={{ ...F, color }}>{val}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
+        {/* ── Header / wordmark ── */}
+        <header className="px-6 md:px-10 py-7 flex items-center">
+          <div className="flex flex-col leading-none select-none">
+            <span className="text-white text-[15px] font-semibold tracking-tight">
+              Sales Support
+            </span>
+            <span className="text-white/40 text-[11px] font-normal tracking-[0.1em] mt-0.5">
+              by Akaike
+            </span>
           </div>
-        );
-      })()}
+        </header>
 
-      {/* ══ CHAT SECTION ════════════════════════════════════════ */}
-      <section
-        ref={toolRef}
-        id="tool"
-        className="bg-black px-4 md:px-10 lg:px-16 py-8"
-      >
-        {/* Section label */}
-        <p className="text-center text-[10px] uppercase tracking-[0.22em] mb-8"
-           style={{ ...F, color: "rgba(255,255,255,0.18)" }}>
-          Akaike · Prompt Optimizer
-        </p>
+        {/* ── Hero ── */}
+        <HeroSection onScrollToTool={scrollToTool} />
 
-        {/* ── Two-column layout ──────────────────────────────── */}
-        <div className="max-w-5xl mx-auto flex gap-3">
-
-          {/* ── LEFT: Chat window ─────────────────────────────── */}
-          <div className="flex-1 flex flex-col min-w-0 liquid-glass rounded-2xl h-[500px]"
+        {/* ── Chat tool ── */}
+        <section
+          ref={toolRef}
+          id="tool"
+          className="px-4 md:px-8 pb-16 flex-1 flex flex-col items-center"
+        >
+          <div className="w-full max-w-2xl mx-auto flex flex-col min-w-0 liquid-glass rounded-2xl h-[460px]"
                style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
 
             {/* Chat header */}
@@ -301,7 +231,7 @@ export default function Home() {
               )}
             </div>
 
-            {/* ── New multimodal input footer ── */}
+            {/* Multimodal input footer */}
             <div className="shrink-0 px-6 pb-5 pt-3 rounded-b-2xl"
                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <ChatInput
@@ -312,31 +242,26 @@ export default function Home() {
               />
             </div>
           </div>
+        </section>
 
-          {/* ── RIGHT: Rules sidebar ──────────────────────────── */}
-          <div className="w-60 lg:w-64 shrink-0 hidden md:flex flex-col">
-            <RulesSidebar />
-          </div>
-        </div>
-      </section>
-
-      {/* ── Footer ── */}
-      <footer className="bg-black px-6 py-8" style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-        <div className="max-w-5xl mx-auto flex items-center justify-between">
-          <div>
-            <p className="text-[12px] font-medium" style={{ ...F, color: "rgba(255,255,255,0.45)" }}>
-              Sales Support
-            </p>
-            <p className="text-[10px] mt-0.5" style={{ ...F, color: "rgba(255,255,255,0.18)" }}>
-              by Akaike Technologies
+        {/* ── Footer ── */}
+        <footer className="px-6 py-7" style={{ borderTop: "1px solid rgba(255,255,255,0.08)" }}>
+          <div className="max-w-2xl mx-auto flex items-center justify-between">
+            <div>
+              <p className="text-[12px] font-medium" style={{ ...F, color: "rgba(255,255,255,0.5)" }}>
+                Sales Support
+              </p>
+              <p className="text-[10px] mt-0.5" style={{ ...F, color: "rgba(255,255,255,0.22)" }}>
+                by Akaike Technologies
+              </p>
+            </div>
+            <p className="text-[10px] uppercase tracking-[0.14em]"
+               style={{ ...F, color: "rgba(255,255,255,0.18)" }}>
+              © 2026 Akaike
             </p>
           </div>
-          <p className="text-[10px] uppercase tracking-[0.14em]"
-             style={{ ...F, color: "rgba(255,255,255,0.1)" }}>
-            © 2026 Akaike
-          </p>
-        </div>
-      </footer>
+        </footer>
+      </div>
 
       <style>{`
         ::-webkit-scrollbar { display: none; }
