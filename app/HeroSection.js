@@ -41,18 +41,6 @@ export default function HeroSection({ onScrollToTool }) {
         Keep every ounce of intent.
       </h1>
 
-      <p
-        className={`max-w-[560px] text-[14px] leading-[1.7] text-center font-light mt-7
-                    transition-all duration-1000 delay-200 ${show}`}
-        style={{ fontFamily: "var(--font-inter)" }}
-      >
-        <span className="text-white">
-          Akaike&apos;s token engine strips every prompt down to its semantic core,
-          slashing API costs, accelerating response time, and keeping your intent intact.
-        </span>{" "}
-        <span className="text-white/45">Same output quality. A fraction of the tokens.</span>
-      </p>
-
       <button
         onClick={onScrollToTool}
         className={`bg-white text-black text-[14px] font-medium rounded-full px-8 py-3.5 mt-8
