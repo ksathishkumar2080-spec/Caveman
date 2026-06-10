@@ -7,79 +7,9 @@ import React, {
   useCallback,
   memo,
 } from "react";
-import equal from "fast-deep-equal";
-import { AnimatePresence, motion } from "framer-motion";
 import { Loader2 as LoaderIcon, X as XIcon, Paperclip, ArrowUp, Square } from "lucide-react";
-import { twMerge } from "tailwind-merge";
 
-const cn = (...args) => twMerge(args.filter(Boolean).join(" "));
 const F = { fontFamily: "var(--font-inter)" };
-
-/* ── Suggested actions ──────────────────────────────────────── */
-const SUGGESTIONS = [
-  {
-    title: "Cold outreach email",
-    label: "Enterprise SaaS client, pricing page visit",
-    action: "Could you please help me write a cold outreach email to a potential enterprise client in the SaaS industry who recently visited our pricing page?",
-  },
-  {
-    title: "Follow-up message",
-    label: "Post-demo prospect, no reply in 7 days",
-    action: "I would like you to create a follow-up message for a prospect who attended our product demo last week but hasn't responded to my previous two emails.",
-  },
-  {
-    title: "Objection response",
-    label: "Pricing objection vs. competitor",
-    action: "Please help me draft a professional response to a pricing objection from a mid-market client who is comparing us against our main competitor.",
-  },
-  {
-    title: "Discovery call prep",
-    label: "CTO at fintech, data analytics platform",
-    action: "In this task, I need you to summarize the key talking points for a discovery call with a CTO at a fintech company interested in our data analytics platform.",
-  },
-];
-
-function PureSuggestedActions({ onSelectAction }) {
-  return (
-    <div className="grid sm:grid-cols-2 gap-2 w-full pb-1">
-      <AnimatePresence>
-        {SUGGESTIONS.map((s, i) => (
-          <motion.div
-            key={i}
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 12 }}
-            transition={{ delay: 0.05 * i, duration: 0.2 }}
-            className={i > 1 ? "hidden sm:block" : "block"}
-          >
-            <button
-              onClick={() => onSelectAction(s.action)}
-              className="w-full text-left rounded-xl px-4 py-3 flex flex-col gap-1 transition-all duration-200"
-              style={{
-                ...F,
-                border: "1px solid rgba(255,255,255,0.07)",
-                background: "rgba(255,255,255,0.03)",
-              }}
-              onMouseEnter={e => e.currentTarget.style.background = "rgba(255,255,255,0.06)"}
-              onMouseLeave={e => e.currentTarget.style.background = "rgba(255,255,255,0.03)"}
-            >
-              <span className="text-[12px] font-medium"
-                    style={{ color: "rgba(255,255,255,0.6)" }}>
-                {s.title}
-              </span>
-              <span className="text-[11px] font-light leading-snug"
-                    style={{ color: "rgba(255,255,255,0.25)" }}>
-                {s.label}
-              </span>
-            </button>
-          </motion.div>
-        ))}
-      </AnimatePresence>
-    </div>
-  );
-}
-
-const SuggestedActions = memo(PureSuggestedActions);
 
 /* ── Attachment preview ─────────────────────────────────────── */
 const PreviewAttachment = memo(function PreviewAttachment({ attachment, isUploading = false }) {
@@ -185,31 +115,10 @@ export default function ChatInput({
   }, [input, attachments, onSend, setAttachments, resetHeight]);
 
   const canSubmit = !isGenerating && uploadQueue.length === 0 && (input.trim().length > 0 || attachments.length > 0);
-  const showSuggestions = messages.length === 0 && !attachments.length && !uploadQueue.length;
   const tokenEstimate = input.trim() ? Math.ceil(input.trim().split(/\s+/).length * 1.3) : null;
 
   return (
     <div className="relative w-full flex flex-col gap-3">
-
-      {/* Suggested actions */}
-      <AnimatePresence>
-        {showSuggestions && (
-          <motion.div
-            key="suggestions"
-            initial={{ opacity: 1, y: 0 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: 10 }}
-            transition={{ duration: 0.2 }}
-          >
-            <SuggestedActions
-              onSelectAction={(action) => {
-                setInput(action);
-                requestAnimationFrame(() => { adjustHeight(); textareaRef.current?.focus(); });
-              }}
-            />
-          </motion.div>
-        )}
-      </AnimatePresence>
 
       {/* Hidden file input */}
       <input
