@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { Lock } from "lucide-react";
 import gsap from "gsap";
 
+const NAV_LINKS = ["TOOL", "FEATURES", "RESEARCH", "CONTACT"];
+
 export default function HeroSection({ onScrollToTool }) {
   const videoRef   = useRef(null);
   const wrapperRef = useRef(null);
@@ -11,58 +13,38 @@ export default function HeroSection({ onScrollToTool }) {
 
   /* ── mount fade-in ── */
   useEffect(() => {
-    const t = setTimeout(() => setMounted(true), 50);
+    const t = setTimeout(() => setMounted(true), 60);
     return () => clearTimeout(t);
   }, []);
 
   /* ── GSAP mouse parallax ── */
   useEffect(() => {
-    let currentX = 0, currentY = 0;
-    let targetX  = 0, targetY  = 0;
-    let rafId;
-
+    let curX = 0, curY = 0, tgtX = 0, tgtY = 0, raf;
     const onMove = (e) => {
-      const cx = window.innerWidth  / 2;
-      const cy = window.innerHeight / 2;
-      targetX = ((e.clientX - cx) / cx) * 20;
-      targetY = ((e.clientY - cy) / cy) * 20;
+      const cx = window.innerWidth / 2, cy = window.innerHeight / 2;
+      tgtX = ((e.clientX - cx) / cx) * 20;
+      tgtY = ((e.clientY - cy) / cy) * 20;
     };
-
     const tick = () => {
-      currentX += (targetX - currentX) * 0.06;
-      currentY += (targetY - currentY) * 0.06;
-      if (wrapperRef.current) {
-        gsap.set(wrapperRef.current, { x: currentX, y: currentY });
-      }
-      rafId = requestAnimationFrame(tick);
+      curX += (tgtX - curX) * 0.06;
+      curY += (tgtY - curY) * 0.06;
+      if (wrapperRef.current) gsap.set(wrapperRef.current, { x: curX, y: curY });
+      raf = requestAnimationFrame(tick);
     };
-
     window.addEventListener("mousemove", onMove);
-    rafId = requestAnimationFrame(tick);
-    return () => {
-      window.removeEventListener("mousemove", onMove);
-      cancelAnimationFrame(rafId);
-    };
+    raf = requestAnimationFrame(tick);
+    return () => { window.removeEventListener("mousemove", onMove); cancelAnimationFrame(raf); };
   }, []);
 
-  /* ── playback rate ── */
-  const handleMeta = () => {
-    if (videoRef.current) videoRef.current.playbackRate = 1.25;
-  };
+  const handleMeta = () => { if (videoRef.current) videoRef.current.playbackRate = 1.25; };
 
-  const fadeBase = "transition-all duration-1000";
-  const fadeIn   = mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-6";
-  const fadeInDelayed = mounted ? "opacity-100 translate-y-0 delay-300" : "opacity-0 translate-y-6";
+  const show = mounted ? "opacity-100 translate-y-0" : "opacity-0 translate-y-5";
 
   return (
     <section className="relative h-screen w-full overflow-hidden bg-black">
 
-      {/* ── Video background ── */}
-      <div
-        ref={wrapperRef}
-        className="absolute inset-0 scale-[1.08] origin-center"
-        style={{ willChange: "transform" }}
-      >
+      {/* ── Video ─────────────────────────────────────────────── */}
+      <div ref={wrapperRef} className="absolute inset-0 scale-[1.08] origin-center" style={{ willChange: "transform" }}>
         <video
           ref={videoRef}
           className="absolute inset-0 w-full h-full object-cover"
@@ -70,32 +52,34 @@ export default function HeroSection({ onScrollToTool }) {
           onLoadedMetadata={handleMeta}
           src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260510_060007_60275ce7-030c-4668-a160-8f364ec537d3.mp4"
         />
-        {/* tint */}
-        <div className="absolute inset-0 bg-black/35" />
+        <div className="absolute inset-0 bg-black/45" />
       </div>
 
-      {/* ── Header ── */}
-      <header
-        className="absolute top-0 left-0 right-0 z-50 px-10 py-8 flex justify-between items-center"
-      >
-        {/* Wordmark */}
-        <span
-          className="text-white text-[17px] font-semibold tracking-tight select-none"
-          style={{ fontFamily: "var(--font-inter), sans-serif" }}
-        >
-          CavePrompt<sup className="text-[10px] ml-0.5 opacity-70">™</sup>
-        </span>
+      {/* ── Header ────────────────────────────────────────────── */}
+      <header className="absolute top-0 left-0 right-0 z-50 px-10 py-8 flex items-center justify-between">
 
-        {/* Nav */}
-        <nav className="hidden md:flex liquid-glass rounded-full px-2 py-2 items-center gap-1">
-          {["TOOL", "RESEARCH", "RULES", "ABOUT"].map((link) => (
+        {/* Wordmark */}
+        <div className="flex flex-col leading-none select-none">
+          <span className="text-white text-[15px] font-semibold tracking-tight"
+                style={{ fontFamily: "var(--font-inter)" }}>
+            Sales Support
+          </span>
+          <span className="text-white/40 text-[11px] font-normal tracking-[0.1em] mt-0.5"
+                style={{ fontFamily: "var(--font-inter)" }}>
+            by Akaike
+          </span>
+        </div>
+
+        {/* Nav pill */}
+        <nav className="hidden md:flex liquid-glass rounded-full px-2 py-2 items-center gap-0.5">
+          {NAV_LINKS.map((link) => (
             <a
               key={link}
               href={`#${link.toLowerCase()}`}
               onClick={link === "TOOL" ? (e) => { e.preventDefault(); onScrollToTool?.(); } : undefined}
-              className="text-[11px] font-medium tracking-[0.12em] text-white/90
-                         hover:text-white px-4 py-1.5 rounded-full transition-colors duration-200"
-              style={{ fontFamily: "var(--font-inter), sans-serif" }}
+              className="text-[11px] font-medium tracking-[0.12em] text-white/80 hover:text-white
+                         px-5 py-1.5 rounded-full transition-colors duration-200"
+              style={{ fontFamily: "var(--font-inter)" }}
             >
               {link}
             </a>
@@ -107,87 +91,91 @@ export default function HeroSection({ onScrollToTool }) {
           href="#tool"
           onClick={(e) => { e.preventDefault(); onScrollToTool?.(); }}
           className="liquid-glass rounded-full px-5 py-2.5 text-[11px] font-medium
-                     tracking-[0.12em] text-white/90 hover:text-white transition-colors duration-200"
-          style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                     tracking-[0.12em] text-white/80 hover:text-white transition-colors duration-200"
+          style={{ fontFamily: "var(--font-inter)" }}
         >
-          START COMPRESSING
+          GET STARTED
         </a>
       </header>
 
-      {/* ── Hero headline ── */}
+      {/* ── Hero headline ─────────────────────────────────────── */}
       <div
-        className={`absolute left-0 right-0 z-20 flex flex-col items-center text-center px-6
-                    ${fadeBase} ${fadeIn}`}
-        style={{ top: "120px", fontFamily: "var(--font-inter), sans-serif" }}
+        className={`absolute left-0 right-0 z-20 flex flex-col items-center text-center
+                    px-6 transition-all duration-1000 ${show}`}
+        style={{ top: "120px" }}
       >
+        <p className="text-white/50 text-[11px] font-medium tracking-[0.2em] mb-6 uppercase"
+           style={{ fontFamily: "var(--font-inter)" }}>
+          Akaike · Sales Intelligence
+        </p>
+
         <h1
           style={{
-            fontSize: "clamp(40px, 5.4vw, 72px)",
+            fontFamily: "var(--font-inter)",
+            fontSize: "clamp(38px, 5.4vw, 70px)",
+            fontWeight: 300,
             lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            fontWeight: 400,
+            letterSpacing: "-0.03em",
           }}
           className="text-white"
         >
-          Compress without mercy.
+          Sell smarter. Reply faster.
         </h1>
         <h1
           style={{
-            fontSize: "clamp(40px, 5.4vw, 72px)",
+            fontFamily: "var(--font-inter)",
+            fontSize: "clamp(38px, 5.4vw, 70px)",
+            fontWeight: 300,
             lineHeight: 1.1,
-            letterSpacing: "-0.02em",
-            fontWeight: 400,
-            color: "rgba(255,255,255,0.55)",
+            letterSpacing: "-0.03em",
+            color: "rgba(255,255,255,0.45)",
           }}
         >
-          Preserve with perfect intent.
+          Close more, say less.
         </h1>
       </div>
 
-      {/* ── Bottom block ── */}
+      {/* ── Bottom block ──────────────────────────────────────── */}
       <div
-        className={`absolute bottom-14 left-0 right-0 z-20 flex flex-col items-center gap-6 px-6
-                    ${fadeBase} ${fadeInDelayed}`}
+        className={`absolute bottom-14 left-0 right-0 z-20 flex flex-col items-center
+                    gap-5 px-6 transition-all duration-1000 delay-300 ${show}`}
       >
-        {/* Description */}
         <p
-          className="max-w-[620px] text-[15px] leading-relaxed text-center"
-          style={{ fontFamily: "var(--font-inter), sans-serif" }}
+          className="max-w-[560px] text-[14px] leading-[1.7] text-center font-light"
+          style={{ fontFamily: "var(--font-inter)" }}
         >
           <span className="text-white">
-            Our compression engine strips prompts to their semantic core — your intent,
-            your constraints, your technical precision.
+            Akaike's sales engine strips every prompt to its precise intent —
+            cutting response time, reducing cost, and keeping your reps in flow.
           </span>{" "}
-          <span className="text-white/55">
-            Each token saved is a cost reduced, latency cut, and context freed.
+          <span className="text-white/45">
+            Every message optimised. Every conversation ready to close.
           </span>
         </p>
 
-        {/* CTA button */}
         <button
           onClick={onScrollToTool}
-          className="bg-white text-black text-[15px] font-medium rounded-full px-8 py-3.5
+          className="bg-white text-black text-[14px] font-medium rounded-full px-8 py-3.5
                      transition-all duration-200 hover:scale-[1.03] active:scale-[0.97]
-                     hover:shadow-[0_0_32px_4px_rgba(255,255,255,0.2)]"
-          style={{ fontFamily: "var(--font-inter), sans-serif" }}
+                     hover:shadow-[0_0_32px_4px_rgba(255,255,255,0.18)]"
+          style={{ fontFamily: "var(--font-inter)" }}
         >
-          Compress my first prompt
+          Try the tool
         </button>
 
-        {/* Trust line */}
         <div className="flex items-center gap-2">
-          <Lock size={13} strokeWidth={1.5} className="text-white/70" />
+          <Lock size={12} strokeWidth={1.5} className="text-white/50" />
           <span
-            className="text-[11px] font-medium tracking-[0.14em] text-white/70"
-            style={{ fontFamily: "var(--font-inter), sans-serif" }}
+            className="text-[10px] font-medium tracking-[0.16em] text-white/50"
+            style={{ fontFamily: "var(--font-inter)" }}
           >
-            LOSSLESS BY DESIGN. ZERO INTENT LEAKED.
+            ENTERPRISE GRADE · BUILT BY AKAIKE
           </span>
         </div>
       </div>
 
       {/* Bottom fade */}
-      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-32
+      <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40
                       bg-gradient-to-b from-transparent to-black" />
     </section>
   );

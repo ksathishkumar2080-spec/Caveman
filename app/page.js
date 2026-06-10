@@ -5,21 +5,21 @@ import { compress } from "../lib/compress";
 import HeroSection from "./HeroSection";
 
 const EXAMPLES = [
-  "Could you please write a Python function that takes a list of integers as input and returns only the even numbers from that list?",
-  "I would like you to act as a senior data engineer and help me design a SQL query that retrieves the top 10 customers by total purchase value from the orders table.",
-  "Please generate a comprehensive REST API documentation in markdown format for an authentication service that includes endpoints for login, logout, token refresh, and password reset.",
-  "In this task, I need you to review the following code snippet and identify any potential security vulnerabilities, particularly focusing on SQL injection and XSS attack vectors.",
+  "Could you please help me write a cold outreach email to a potential enterprise client in the SaaS industry who recently visited our pricing page?",
+  "I would like you to create a follow-up message for a prospect who attended our product demo last week but hasn't responded to my previous two emails.",
+  "Please help me draft a professional response to a pricing objection from a mid-market client who is comparing us against our main competitor.",
+  "In this task, I need you to summarize the key talking points for a discovery call with a CTO at a fintech company interested in our data analytics platform.",
 ];
 
 const RULES = [
-  { code: "R1", name: "drop articles",        desc: "Remove all occurrences of a, an, the" },
-  { code: "R2", name: "drop politeness",       desc: "Remove please, could you, I'd like…" },
-  { code: "R3", name: "drop scaffolding",      desc: "Remove 'In this task', 'For context'…" },
-  { code: "R4", name: "compress verb phrases", desc: "'provide me with a list of' → list" },
-  { code: "R5", name: "abbreviate tech",       desc: "JS, TS, DB, auth, config, docs…" },
-  { code: "R6", name: "collapse redundancy",   desc: "Remove repeated implied constraints" },
-  { code: "R7", name: "flatten conditionals",  desc: "'if it's not too much trouble' → removed" },
-  { code: "R8", name: "preserve critical",     desc: "Negations, numbers, formats — untouched" },
+  { code: "R1", name: "Drop articles",         desc: "Remove a, an, the — zero semantic loss" },
+  { code: "R2", name: "Drop politeness",        desc: "please, could you, I'd like → removed" },
+  { code: "R3", name: "Drop scaffolding",       desc: "'In this task', 'For context' → removed" },
+  { code: "R4", name: "Compress verb phrases",  desc: "'provide me with a list of' → list:" },
+  { code: "R5", name: "Abbreviate tech",        desc: "auth, config, docs, DB, JS, TS…" },
+  { code: "R6", name: "Collapse redundancy",    desc: "Repeated constraints → stripped" },
+  { code: "R7", name: "Flatten conditionals",   desc: "'if not too much trouble' → removed" },
+  { code: "R8", name: "Preserve critical",      desc: "Negations, numbers, formats — kept" },
 ];
 
 export default function Home() {
@@ -49,101 +49,99 @@ export default function Home() {
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter") handleCompress();
   };
 
+  /* shared font style */
+  const F = { fontFamily: "var(--font-inter)" };
+
   return (
-    <main
-      className="min-h-screen bg-black text-white overflow-x-hidden"
-      style={{ fontFamily: "var(--font-inter), sans-serif" }}
-    >
-      {/* ══ HERO ═══════════════════════════════════════════════ */}
+    <main className="min-h-screen bg-black text-white overflow-x-hidden" style={F}>
+
+      {/* ══ HERO ════════════════════════════════════════════════ */}
       <HeroSection onScrollToTool={scrollToTool} />
 
-      {/* ══ TOOL ════════════════════════════════════════════════ */}
-      <section
-        ref={toolRef}
-        id="tool"
-        className="min-h-screen px-6 md:px-16 py-24 bg-black"
-      >
-        <div className="max-w-3xl mx-auto">
+      {/* ══ TOOL SECTION ════════════════════════════════════════ */}
+      <section ref={toolRef} id="tool" className="min-h-screen bg-black px-6 md:px-16 lg:px-24 py-24">
+        <div className="max-w-2xl mx-auto">
 
-          {/* Section label */}
-          <p className="text-white/30 text-xs uppercase tracking-widest mb-4 font-mono">
-            compression tool
-          </p>
-
-          {/* Section heading */}
-          <div className="mb-12">
-            <h2
-              className="text-white text-4xl md:text-6xl font-light mb-1"
-              style={{
-                fontFamily: "var(--font-instrument), Georgia, serif",
-                fontStyle: "italic",
-                letterSpacing: "-0.02em",
-              }}
-            >
+          {/* ── Section heading ── */}
+          <div className="mb-16">
+            <p className="text-white/25 text-[10px] uppercase tracking-[0.22em] mb-5" style={F}>
+              Akaike · Prompt Optimizer
+            </p>
+            <h2 style={{
+              fontFamily: "var(--font-serif)",
+              fontStyle: "italic",
+              fontSize: "clamp(36px, 5vw, 60px)",
+              fontWeight: 400,
+              lineHeight: 1.05,
+              letterSpacing: "-0.01em",
+              color: "rgba(255,255,255,1)",
+            }}>
               Paste.
             </h2>
-            <h2
-              className="text-white text-4xl md:text-6xl font-light mb-1"
-              style={{
-                fontFamily: "var(--font-instrument), Georgia, serif",
-                fontStyle: "italic",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Compress.
+            <h2 style={{
+              fontFamily: "var(--font-serif)",
+              fontStyle: "italic",
+              fontSize: "clamp(36px, 5vw, 60px)",
+              fontWeight: 400,
+              lineHeight: 1.05,
+              letterSpacing: "-0.01em",
+              color: "rgba(255,255,255,1)",
+            }}>
+              Optimise.
             </h2>
-            <h2
-              className="text-white/40 text-4xl md:text-6xl font-light"
-              style={{
-                fontFamily: "var(--font-instrument), Georgia, serif",
-                fontStyle: "italic",
-                letterSpacing: "-0.02em",
-              }}
-            >
-              Ship.
+            <h2 style={{
+              fontFamily: "var(--font-serif)",
+              fontStyle: "italic",
+              fontSize: "clamp(36px, 5vw, 60px)",
+              fontWeight: 400,
+              lineHeight: 1.05,
+              letterSpacing: "-0.01em",
+              color: "rgba(255,255,255,0.28)",
+            }}>
+              Send.
             </h2>
           </div>
 
-          <div className="h-px w-full bg-white/10 mb-12" />
+          <div className="h-px bg-white/8 mb-12" />
 
           {/* ── Input ── */}
-          <div className="liquid-glass rounded-2xl overflow-hidden mb-4">
-            <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
-              <span className="text-white/40 text-[11px] uppercase tracking-widest font-mono">
-                verbose prompt
+          <div className="mb-3">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-white/30 text-[10px] uppercase tracking-[0.18em]" style={F}>
+                Your prompt
               </span>
-              <span className="text-white/20 text-[11px] font-mono">
+              <span className="text-white/20 text-[10px] tabular-nums" style={F}>
                 {input.trim()
                   ? `~${Math.ceil(input.trim().split(/\s+/).length * 1.3)} tokens`
-                  : "0 tokens"}
+                  : "—"}
               </span>
             </div>
             <textarea
               value={input}
               onChange={(e) => { setInput(e.target.value); setResult(null); }}
               onKeyDown={handleKeyDown}
-              placeholder="paste your llm prompt here…"
+              placeholder="Paste your sales prompt here…"
               rows={6}
-              className="w-full bg-transparent text-white text-[15px] leading-relaxed
-                         p-5 resize-none outline-none placeholder:text-white/20
-                         font-light"
-              style={{ fontFamily: "var(--font-barlow), sans-serif" }}
+              className="w-full liquid-glass rounded-xl text-white text-[14px] leading-[1.75]
+                         p-5 resize-none outline-none placeholder:text-white/18 font-light"
+              style={F}
             />
           </div>
 
-          {/* Examples */}
-          <div className="flex flex-wrap gap-2 mb-6">
-            <span className="text-white/30 text-[11px] uppercase tracking-widest font-mono self-center">
-              try:
+          {/* Examples row */}
+          <div className="flex flex-wrap gap-1.5 mb-8">
+            <span className="text-white/20 text-[10px] uppercase tracking-[0.15em] self-center mr-1" style={F}>
+              Try:
             </span>
             {EXAMPLES.map((ex, i) => (
               <button
                 key={i}
                 onClick={() => { setInput(ex); setResult(null); setCopied(false); }}
-                className="liquid-glass text-white/40 hover:text-white
-                           text-[11px] px-3 py-1.5 rounded-full transition-colors font-mono"
+                className="liquid-glass text-white/35 hover:text-white/70
+                           text-[10px] px-3 py-1.5 rounded-full transition-colors"
+                style={F}
               >
-                example {i + 1}
+                Example {i + 1}
               </button>
             ))}
           </div>
@@ -152,94 +150,90 @@ export default function Home() {
           <button
             onClick={handleCompress}
             disabled={!input.trim()}
-            className="w-full py-4 rounded-xl text-[13px] font-medium tracking-widest
-                       uppercase transition-all mb-10 disabled:opacity-20 disabled:cursor-not-allowed
-                       bg-white text-black hover:bg-white/90 hover:scale-[1.01]
-                       active:scale-[0.99] hover:shadow-[0_0_32px_4px_rgba(255,255,255,0.12)]"
+            className="w-full py-4 rounded-xl text-[12px] font-medium tracking-[0.14em]
+                       uppercase transition-all duration-200 mb-12
+                       disabled:opacity-15 disabled:cursor-not-allowed
+                       bg-white text-black hover:bg-white/92
+                       hover:scale-[1.01] active:scale-[0.99]
+                       hover:shadow-[0_0_28px_2px_rgba(255,255,255,0.10)]"
+            style={F}
           >
-            🗿 compress prompt
-            <span className="ml-3 text-[11px] opacity-40 normal-case font-mono">⌘↵</span>
+            Optimise prompt
+            <span className="ml-3 text-[10px] opacity-35 normal-case font-normal">⌘↵</span>
           </button>
 
           {/* ── Result ── */}
           {result && (
-            <div
-              className="liquid-glass rounded-2xl overflow-hidden mb-16"
-              style={{ animation: "fadeUp 0.35s ease" }}
-            >
-              {/* Stats bar */}
-              <div className="grid grid-cols-3 border-b border-white/10">
+            <div className="liquid-glass rounded-2xl overflow-hidden mb-20"
+                 style={{ animation: "fadeUp 0.3s ease" }}>
+
+              {/* Stats */}
+              <div className="grid grid-cols-3 divide-x divide-white/8">
                 {[
-                  { label: "before", val: `~${result.inputTokens}`,  sub: "tokens",    color: "#f87171" },
-                  { label: "after",  val: `~${result.outputTokens}`, sub: "tokens",    color: "#a3e635" },
-                  { label: "saved",  val: `${result.reduction}%`,    sub: "reduction", color: "#fbbf24" },
+                  { label: "Before", val: `~${result.inputTokens}`,  sub: "tokens",    color: "#f87171" },
+                  { label: "After",  val: `~${result.outputTokens}`, sub: "tokens",    color: "#86efac" },
+                  { label: "Saved",  val: `${result.reduction}%`,    sub: "reduction", color: "#fde68a" },
                 ].map(({ label, val, sub, color }) => (
-                  <div key={label} className="py-5 text-center border-r border-white/10 last:border-r-0">
-                    <p className="text-white/30 text-[11px] uppercase tracking-widest font-mono mb-1">
-                      {label}
-                    </p>
-                    <p
-                      className="text-3xl font-semibold"
-                      style={{ color, fontFamily: "var(--font-inter), sans-serif" }}
-                    >
-                      {val}
-                    </p>
-                    <p className="text-white/30 text-[11px] mt-1 font-mono">{sub}</p>
+                  <div key={label} className="py-6 text-center">
+                    <p className="text-white/25 text-[10px] uppercase tracking-[0.15em] mb-1" style={F}>{label}</p>
+                    <p className="text-[28px] font-semibold leading-none mb-1" style={{ color, ...F }}>{val}</p>
+                    <p className="text-white/25 text-[10px]" style={F}>{sub}</p>
                   </div>
                 ))}
               </div>
 
               {/* Output */}
-              <div className="p-5">
+              <div className="border-t border-white/8 p-5">
                 <div className="flex items-center justify-between mb-3">
-                  <span className="text-white/30 text-[11px] uppercase tracking-widest font-mono">
-                    caveman prompt
+                  <span className="text-white/30 text-[10px] uppercase tracking-[0.15em]" style={F}>
+                    Optimised prompt
                   </span>
-                  <div className="flex gap-2">
+                  <div className="flex gap-1.5">
                     <button
                       onClick={() => setShowSteps(!showSteps)}
-                      className="liquid-glass text-white/40 hover:text-white
-                                 text-[11px] px-3 py-1.5 rounded-full transition-colors font-mono"
+                      className="liquid-glass text-white/30 hover:text-white/70
+                                 text-[10px] px-3 py-1.5 rounded-full transition-colors"
+                      style={F}
                     >
-                      {showSteps ? "hide steps" : `steps (${result.steps.length})`}
+                      {showSteps ? "Hide steps" : `${result.steps.length} steps`}
                     </button>
                     <button
                       onClick={handleCopy}
-                      className={`text-[11px] px-3 py-1.5 rounded-full transition-colors font-mono
-                        ${copied
-                          ? "bg-white text-black"
-                          : "liquid-glass text-white/40 hover:text-white"}`}
+                      className={`text-[10px] px-3 py-1.5 rounded-full transition-all duration-200
+                        ${copied ? "bg-white text-black scale-95" : "liquid-glass text-white/30 hover:text-white/70"}`}
+                      style={F}
                     >
-                      {copied ? "✓ copied" : "copy"}
+                      {copied ? "✓ Copied" : "Copy"}
                     </button>
                   </div>
                 </div>
 
-                <div
-                  className="liquid-glass rounded-xl p-5 text-white text-[15px] leading-relaxed font-light"
-                  style={{ fontFamily: "var(--font-barlow), sans-serif" }}
-                >
+                <div className="bg-white/3 border border-white/6 rounded-xl p-5
+                                text-white text-[14px] leading-[1.75] font-light"
+                     style={F}>
                   {result.output || (
-                    <span className="text-white/30 italic">
-                      nothing left after compression
-                    </span>
+                    <span className="text-white/25 italic">Nothing remains after optimisation.</span>
                   )}
                 </div>
               </div>
 
               {/* Steps */}
               {showSteps && result.steps.length > 0 && (
-                <div className="border-t border-white/10 p-5 space-y-4">
-                  <p className="text-white/30 text-[11px] uppercase tracking-widest font-mono mb-4">
-                    applied rules
+                <div className="border-t border-white/8 p-5 space-y-4">
+                  <p className="text-white/25 text-[10px] uppercase tracking-[0.15em] mb-5" style={F}>
+                    Optimisation steps
                   </p>
                   {result.steps.map((step, i) => (
-                    <div key={i} className="border-l-2 border-white/20 pl-4">
-                      <p className="text-white/50 text-[11px] font-mono mb-1">{step.rule}</p>
-                      <p className="text-red-400/60 text-sm italic mb-0.5 line-through font-mono">
+                    <div key={i} className="pl-4 border-l border-white/10">
+                      <p className="text-white/40 text-[10px] uppercase tracking-[0.1em] mb-1.5" style={F}>
+                        {step.rule}
+                      </p>
+                      <p className="text-white/30 text-[13px] line-through mb-1 font-light" style={F}>
                         {step.before}
                       </p>
-                      <p className="text-white/80 text-sm font-mono">{step.after}</p>
+                      <p className="text-white/75 text-[13px] font-light" style={F}>
+                        {step.after}
+                      </p>
                     </div>
                   ))}
                 </div>
@@ -247,40 +241,55 @@ export default function Home() {
             </div>
           )}
 
-          {/* ── Rules grid ── */}
-          <div id="rules">
-            <p className="text-white/30 text-[11px] uppercase tracking-widest font-mono mb-6">
-              the 8 rules
+          {/* ── Rules ── */}
+          <div id="rules" className="mb-20">
+            <p className="text-white/25 text-[10px] uppercase tracking-[0.2em] mb-6" style={F}>
+              Compression rules
             </p>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
               {RULES.map(({ code, name, desc }) => (
-                <div
-                  key={code}
-                  className="liquid-glass rounded-xl p-4 flex gap-4 hover:bg-white/5 transition-colors"
-                >
-                  <span className="text-white/30 font-mono text-[11px] pt-0.5 shrink-0">{code}</span>
+                <div key={code}
+                     className="flex gap-4 p-4 rounded-xl border border-white/6
+                                hover:border-white/12 hover:bg-white/2 transition-all duration-200">
+                  <span className="text-white/20 text-[10px] pt-0.5 shrink-0 tabular-nums" style={F}>
+                    {code}
+                  </span>
                   <div>
-                    <p className="text-white text-sm font-mono font-medium mb-0.5">{name}</p>
-                    <p className="text-white/30 text-[11px] leading-snug font-mono">{desc}</p>
+                    <p className="text-white/70 text-[12px] font-medium mb-0.5" style={F}>{name}</p>
+                    <p className="text-white/25 text-[11px] leading-snug font-light" style={F}>{desc}</p>
                   </div>
                 </div>
               ))}
             </div>
           </div>
+
         </div>
       </section>
 
       {/* ── Footer ── */}
-      <footer className="bg-black border-t border-white/5 px-6 py-8 text-center
-                         text-white/20 text-[11px] font-mono uppercase tracking-widest">
-        🗿 caveprompt — strip prompts to their semantic core
+      <footer className="bg-black border-t border-white/6 px-6 py-10">
+        <div className="max-w-2xl mx-auto flex items-center justify-between">
+          <div>
+            <p className="text-white/60 text-[13px] font-medium" style={F}>Sales Support</p>
+            <p className="text-white/25 text-[11px] mt-0.5" style={F}>by Akaike Technologies</p>
+          </div>
+          <p className="text-white/15 text-[10px] uppercase tracking-[0.16em]" style={F}>
+            © 2026 Akaike
+          </p>
+        </div>
       </footer>
 
       <style>{`
         @keyframes fadeUp {
-          from { opacity: 0; transform: translateY(12px); }
+          from { opacity: 0; transform: translateY(10px); }
           to   { opacity: 1; transform: translateY(0); }
         }
+        .text-white\/18 { color: rgba(255,255,255,0.18); }
+        .bg-white\/3 { background: rgba(255,255,255,0.03); }
+        .bg-white\/2 { background: rgba(255,255,255,0.02); }
+        .border-white\/8 { border-color: rgba(255,255,255,0.08); }
+        .divide-white\/8 > * + * { border-color: rgba(255,255,255,0.08); }
+        .bg-white\/92 { background: rgba(255,255,255,0.92); }
       `}</style>
     </main>
   );
