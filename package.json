@@ -1,0 +1,19 @@
+{
+  "name": "caveman",
+  "version": "1.0.0",
+  "description": "Generates the CavePrompt research & scope document (.docx)",
+  "main": "scripts/generate_doc.js",
+  "scripts": {
+    "generate": "node scripts/generate_doc.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "http://local_proxy@127.0.0.1:32937/git/ksathishkumar2080-spec/Caveman"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "docx": "^9.7.1"
+  }
+}
