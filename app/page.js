@@ -177,7 +177,7 @@ export default function Home() {
           id="tool"
           className="px-4 md:px-8 py-10 flex-1 flex flex-col items-center justify-center"
         >
-          <div className="w-full max-w-xl mx-auto flex flex-col min-w-0 liquid-glass rounded-2xl h-[440px]"
+          <div className="w-full max-w-2xl mx-auto flex flex-col min-w-0 liquid-glass rounded-2xl h-[460px]"
                style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
 
             {/* Chat header */}

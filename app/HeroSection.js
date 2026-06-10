@@ -22,9 +22,9 @@ export default function HeroSection({ onScrollToTool }) {
   };
 
   return (
-    <section className="relative w-full flex flex-col items-center text-center px-6 pt-24 pb-12 md:pt-28">
+    <section className="relative w-full flex flex-col items-center text-center px-6 pt-24 pb-16 md:pt-28">
       <p
-        className={`text-white/50 text-[11px] font-medium tracking-[0.2em] mb-6 uppercase
+        className={`text-white/50 text-[11px] font-medium tracking-[0.2em] mb-10 uppercase
                     transition-all duration-1000 ${show}`}
         style={{ fontFamily: "var(--font-inter)" }}
       >
@@ -35,7 +35,7 @@ export default function HeroSection({ onScrollToTool }) {
         Cut tokens by 70%.
       </h1>
       <h1
-        className={`transition-all duration-1000 delay-100 ${show}`}
+        className={`transition-all duration-1000 delay-100 mt-1 ${show}`}
         style={{ ...headline, color: "rgba(255,255,255,0.45)" }}
       >
         Keep every ounce of intent.
@@ -43,7 +43,7 @@ export default function HeroSection({ onScrollToTool }) {
 
       <button
         onClick={onScrollToTool}
-        className={`bg-white text-black text-[14px] font-medium rounded-full px-8 py-3.5 mt-8
+        className={`bg-white text-black text-[14px] font-medium rounded-full px-8 py-3.5 mt-12
                     transition-all duration-200 hover:scale-[1.03] active:scale-[0.97]
                     hover:shadow-[0_0_32px_4px_rgba(255,255,255,0.18)] ${show}`}
         style={{ fontFamily: "var(--font-inter)" }}
@@ -51,7 +51,7 @@ export default function HeroSection({ onScrollToTool }) {
         Start saving tokens
       </button>
 
-      <div className={`flex items-center gap-2 mt-7 transition-all duration-1000 delay-300 ${show}`}>
+      <div className={`flex items-center gap-2 mt-6 transition-all duration-1000 delay-300 ${show}`}>
         <Lock size={12} strokeWidth={1.5} className="text-white/50" />
         <span
           className="text-[10px] font-medium tracking-[0.16em] text-white/50"
