@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState, useCallback, useRef } from "react";
 import { compress } from "../lib/compress";
 
 const EXAMPLES = [
@@ -11,35 +11,29 @@ const EXAMPLES = [
 ];
 
 const RULES = [
-  { code: "R1", name: "DROP ARTICLES", desc: "Remove all occurrences of a, an, the" },
-  { code: "R2", name: "DROP POLITENESS", desc: "Remove please, could you, I'd like, feel free…" },
-  { code: "R3", name: "DROP INTRO SCAFFOLDING", desc: "Remove preambles like 'In this task', 'For context'" },
-  { code: "R4", name: "COMPRESS VERB PHRASES", desc: "'provide me with a list of' → list" },
-  { code: "R5", name: "ABBREVIATE KNOWN TECH", desc: "JavaScript → JS, database → DB (unambiguous only)" },
-  { code: "R6", name: "COLLAPSE REDUNDANT CLAUSES", desc: "Remove repeated constraints already implied" },
-  { code: "R7", name: "FLATTEN POLITE CONDITIONALS", desc: "'if it's not too much trouble' → removed" },
-  { code: "R8", name: "PRESERVE CRITICAL TOKENS", desc: "Negations, numbers, formats, tech names — untouched" },
+  { code: "R1", name: "drop articles",        desc: "Remove all occurrences of a, an, the" },
+  { code: "R2", name: "drop politeness",       desc: "Remove please, could you, I'd like…" },
+  { code: "R3", name: "drop scaffolding",      desc: "Remove 'In this task', 'For context'…" },
+  { code: "R4", name: "compress verb phrases", desc: "'provide me with a list of' → list" },
+  { code: "R5", name: "abbreviate tech",       desc: "JavaScript → JS, database → DB" },
+  { code: "R6", name: "collapse redundancy",   desc: "Remove repeated implied constraints" },
+  { code: "R7", name: "flatten conditionals",  desc: "'if it's not too much trouble' → removed" },
+  { code: "R8", name: "preserve critical",     desc: "Negations, numbers, formats — untouched" },
 ];
 
 export default function Home() {
-  const [input, setInput] = useState("");
-  const [result, setResult] = useState(null);
-  const [copied, setCopied] = useState(false);
+  const [input, setInput]       = useState("");
+  const [result, setResult]     = useState(null);
+  const [copied, setCopied]     = useState(false);
   const [showSteps, setShowSteps] = useState(false);
+  const toolRef = useRef(null);
 
   const handleCompress = useCallback(() => {
     if (!input.trim()) return;
-    const res = compress(input);
-    setResult(res);
+    setResult(compress(input));
     setShowSteps(false);
     setCopied(false);
   }, [input]);
-
-  const handleExample = (ex) => {
-    setInput(ex);
-    setResult(null);
-    setCopied(false);
-  };
 
   const handleCopy = async () => {
     if (!result?.output) return;
@@ -52,377 +46,330 @@ export default function Home() {
     if ((e.metaKey || e.ctrlKey) && e.key === "Enter") handleCompress();
   };
 
+  const scrollToTool = () =>
+    toolRef.current?.scrollIntoView({ behavior: "smooth" });
+
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* Header */}
-      <header style={{
-        borderBottom: "1px solid #2D2D3F",
-        padding: "20px 32px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        background: "#1A1A2E",
-        position: "sticky",
-        top: 0,
-        zIndex: 10,
-      }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-          <span style={{ fontSize: "28px" }}>🗿</span>
-          <div>
-            <div style={{ fontSize: "20px", fontWeight: "800", color: "#F4F2EF", letterSpacing: "0.03em" }}>
-              CAVEPROMPT
+    <main className="bg-background text-cream">
+
+      {/* ══════════════════════════════════════════════
+          HERO — Orbis.Nft style
+      ══════════════════════════════════════════════ */}
+      <section className="relative h-screen w-full overflow-hidden rounded-b-[32px]">
+
+        {/* BG video */}
+        <video
+          className="absolute inset-0 w-full h-full object-cover"
+          autoPlay loop muted playsInline
+          src="https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260331_045634_e1c98c76-1265-4f5c-882a-4276f2080894.mp4"
+        />
+
+        {/* Dark tint */}
+        <div className="absolute inset-0 bg-background/40" />
+
+        {/* ── Navbar ─────────────────────────────────── */}
+        <div className="absolute z-20 top-0 left-0 right-0 px-6 lg:px-10 pt-6
+                        flex items-center justify-between">
+
+          {/* Logo */}
+          <span className="font-grotesk text-cream uppercase text-[16px] tracking-tight">
+            Cave.Prompt
+          </span>
+
+          {/* Center nav — liquid glass pill (desktop only) */}
+          <nav className="hidden lg:block liquid-glass rounded-[28px] px-[52px] py-[24px]">
+            <div className="flex items-center gap-8">
+              {["tool", "research", "rules", "about"].map((link) => (
+                <a
+                  key={link}
+                  href={link === "tool" ? "#tool" : "#"}
+                  onClick={link === "tool"
+                    ? (e) => { e.preventDefault(); scrollToTool(); }
+                    : undefined}
+                  className="font-grotesk text-[13px] uppercase text-cream
+                             hover:text-neon transition-colors"
+                >
+                  {link}
+                </a>
+              ))}
             </div>
-            <div style={{ fontSize: "12px", color: "#8888AA", letterSpacing: "0.05em" }}>
-              LLM TOKEN COMPRESSOR
-            </div>
+          </nav>
+
+          {/* Social icons — desktop, stacked top-right */}
+          <div className="hidden lg:flex flex-col gap-2">
+            {[
+              /* Mail */
+              <svg key="mail" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>,
+              /* Twitter/X */
+              <svg key="x" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4l16 16M4 20 20 4"/></svg>,
+              /* Github */
+              <svg key="gh" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/></svg>,
+            ].map((icon, i) => (
+              <button key={i}
+                className="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center
+                           text-cream hover:bg-white/10 transition-colors">
+                {icon}
+              </button>
+            ))}
           </div>
         </div>
-        <div style={{
-          fontSize: "12px",
-          color: "#8888AA",
-          background: "#2D2D3F",
-          padding: "6px 14px",
-          borderRadius: "20px",
-          border: "1px solid #4A4A6A",
-        }}>
-          75% fewer tokens · 100% intent preserved
+
+        {/* ── Hero Content ───────────────────────────── */}
+        <div className="relative h-full w-full flex flex-col justify-center
+                        px-6 lg:px-10 pt-24 pb-12 max-w-[1831px] mx-auto">
+
+          {/* Heading block */}
+          <div className="relative lg:ml-32">
+            <h1 className="font-grotesk uppercase leading-[1.05] lg:leading-[1]
+                           text-[40px] sm:text-[60px] md:text-[75px] lg:text-[90px]
+                           max-w-[780px] text-cream">
+              Beyond verbose
+              <br />
+              and <span className="opacity-50">( its )</span> wasted
+              <br />
+              tokens
+            </h1>
+
+            {/* Condiment cursive accent */}
+            <span className="font-condiment text-neon
+                             text-[24px] sm:text-[32px] md:text-[40px] lg:text-[48px]
+                             absolute -right-4 lg:right-[-80px] top-2
+                             -rotate-1 opacity-90 mix-blend-exclusion
+                             pointer-events-none">
+              token compression
+            </span>
+          </div>
+
+          {/* Stats row */}
+          <div className="flex flex-wrap gap-10 mt-12 lg:ml-32">
+            {[
+              { val: "75%",  label: "avg token reduction" },
+              { val: "+500", label: "prompt pairs tested"  },
+              { val: "8",    label: "compression rules"    },
+            ].map(({ val, label }) => (
+              <div key={label}>
+                <p className="font-grotesk text-[36px] lg:text-[48px] leading-none text-cream">
+                  {val}
+                </p>
+                <p className="font-mono text-[11px] uppercase text-cream/50 mt-1 tracking-widest">
+                  {label}
+                </p>
+              </div>
+            ))}
+          </div>
+
+          {/* Social icons — mobile (centered below heading) */}
+          <div className="flex lg:hidden gap-3 mt-10">
+            {["✉", "✕", "⌥"].map((icon, i) => (
+              <button key={i}
+                className="liquid-glass rounded-[1rem] w-14 h-14 flex items-center justify-center
+                           text-cream hover:bg-white/10 transition-colors text-lg">
+                {icon}
+              </button>
+            ))}
+          </div>
+
+          {/* CTA */}
+          <button
+            onClick={scrollToTool}
+            className="mt-12 lg:ml-32 self-start font-grotesk uppercase text-[13px]
+                       tracking-widest text-cream/60 hover:text-neon transition-colors
+                       flex items-center gap-3">
+            <span className="inline-block w-12 h-px bg-cream/30" />
+            compress now
+          </button>
         </div>
-      </header>
 
-      {/* Main */}
-      <main style={{ flex: 1, maxWidth: "960px", width: "100%", margin: "0 auto", padding: "40px 24px" }}>
+        {/* Bottom fade */}
+        <div className="pointer-events-none absolute bottom-0 left-0 right-0 h-40
+                        bg-gradient-to-b from-transparent to-background" />
+      </section>
 
-        {/* Hero */}
-        <div style={{ textAlign: "center", marginBottom: "48px" }}>
-          <h1 style={{
-            fontSize: "clamp(28px, 5vw, 48px)",
-            fontWeight: "900",
-            color: "#F4F2EF",
-            lineHeight: 1.15,
-            marginBottom: "16px",
-          }}>
-            Strip your prompts to their{" "}
-            <span style={{ color: "#0F7173" }}>semantic core.</span>
-          </h1>
-          <p style={{ fontSize: "16px", color: "#8888AA", maxWidth: "560px", margin: "0 auto" }}>
-            Remove grammar, politeness, and scaffolding that LLMs ignore anyway.
-            Keep every token that carries real meaning.
+      {/* ══════════════════════════════════════════════
+          TOOL SECTION
+      ══════════════════════════════════════════════ */}
+      <section ref={toolRef} id="tool" className="min-h-screen px-6 md:px-16 py-24 bg-background">
+        <div className="max-w-3xl mx-auto">
+
+          <p className="font-mono text-cream/30 text-xs uppercase tracking-widest mb-4">
+            compression tool
           </p>
-        </div>
+          <h2 className="font-grotesk text-cream text-3xl md:text-5xl uppercase mb-2"
+              style={{ letterSpacing: "-0.02em" }}>
+            paste.
+          </h2>
+          <h2 className="font-grotesk text-cream text-3xl md:text-5xl uppercase mb-2"
+              style={{ letterSpacing: "-0.02em" }}>
+            compress.{" "}
+            <span className="font-condiment text-neon normal-case text-[2em] -rotate-1 inline-block">
+              ship.
+            </span>
+          </h2>
+          <div className="h-px w-full bg-cream/10 mb-12 mt-8" />
 
-        {/* Stats bar */}
-        <div style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(3, 1fr)",
-          gap: "12px",
-          marginBottom: "40px",
-        }}>
-          {[
-            { val: "75%", label: "Avg token reduction" },
-            { val: "~100%", label: "Task accuracy maintained" },
-            { val: "8 Rules", label: "Compression system" },
-          ].map(({ val, label }) => (
-            <div key={label} style={{
-              background: "#2D2D3F",
-              border: "1px solid #4A4A6A",
-              borderRadius: "12px",
-              padding: "20px",
-              textAlign: "center",
-            }}>
-              <div style={{ fontSize: "28px", fontWeight: "800", color: "#E8A838", marginBottom: "4px" }}>{val}</div>
-              <div style={{ fontSize: "12px", color: "#8888AA", textTransform: "uppercase", letterSpacing: "0.08em" }}>{label}</div>
-            </div>
-          ))}
-        </div>
-
-        {/* Compressor */}
-        <div style={{
-          background: "#2D2D3F",
-          border: "1px solid #4A4A6A",
-          borderRadius: "16px",
-          overflow: "hidden",
-          marginBottom: "32px",
-        }}>
-          {/* Input */}
-          <div style={{ padding: "24px 24px 0" }}>
-            <div style={{
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "space-between",
-              marginBottom: "10px",
-            }}>
-              <label style={{ fontSize: "12px", color: "#8888AA", fontWeight: "700", letterSpacing: "0.08em", textTransform: "uppercase" }}>
-                Verbose Prompt
-              </label>
-              <span style={{ fontSize: "12px", color: "#4A4A6A" }}>
-                {input.trim() ? `~${Math.ceil(input.trim().split(/\s+/).length * 1.3)} tokens` : "0 tokens"}
+          {/* Input card */}
+          <div className="liquid-glass rounded-2xl overflow-hidden mb-4">
+            <div className="flex items-center justify-between px-5 py-3 border-b border-white/10">
+              <span className="font-mono text-cream/40 text-xs uppercase tracking-widest">
+                verbose prompt
+              </span>
+              <span className="font-mono text-cream/20 text-xs">
+                {input.trim()
+                  ? `~${Math.ceil(input.trim().split(/\s+/).length * 1.3)} tokens`
+                  : "0 tokens"}
               </span>
             </div>
             <textarea
               value={input}
               onChange={(e) => { setInput(e.target.value); setResult(null); }}
               onKeyDown={handleKeyDown}
-              placeholder="Paste your LLM prompt here…"
+              placeholder="paste your llm prompt here…"
               rows={6}
-              style={{
-                width: "100%",
-                background: "#1A1A2E",
-                border: "1px solid #4A4A6A",
-                borderRadius: "10px",
-                color: "#F4F2EF",
-                fontSize: "15px",
-                lineHeight: "1.7",
-                padding: "16px",
-                resize: "vertical",
-                outline: "none",
-                fontFamily: "inherit",
-                transition: "border-color 0.2s",
-              }}
-              onFocus={(e) => e.target.style.borderColor = "#0F7173"}
-              onBlur={(e) => e.target.style.borderColor = "#4A4A6A"}
+              className="w-full bg-transparent text-cream text-[15px] leading-relaxed
+                         p-5 resize-none outline-none placeholder:text-cream/20
+                         font-mono font-light"
             />
           </div>
 
           {/* Examples */}
-          <div style={{ padding: "12px 24px" }}>
-            <span style={{ fontSize: "11px", color: "#4A4A6A", marginRight: "10px", textTransform: "uppercase", letterSpacing: "0.06em" }}>Try:</span>
+          <div className="flex flex-wrap gap-2 mb-6">
+            <span className="font-mono text-cream/30 text-xs uppercase tracking-widest self-center">
+              try:
+            </span>
             {EXAMPLES.map((ex, i) => (
-              <button
-                key={i}
-                onClick={() => handleExample(ex)}
-                style={{
-                  background: "transparent",
-                  border: "1px solid #4A4A6A",
-                  borderRadius: "6px",
-                  color: "#8888AA",
-                  fontSize: "11px",
-                  padding: "3px 10px",
-                  marginRight: "6px",
-                  cursor: "pointer",
-                  transition: "all 0.15s",
-                }}
-                onMouseEnter={(e) => { e.target.style.borderColor = "#0F7173"; e.target.style.color = "#0F7173"; }}
-                onMouseLeave={(e) => { e.target.style.borderColor = "#4A4A6A"; e.target.style.color = "#8888AA"; }}
-              >
-                Example {i + 1}
+              <button key={i}
+                onClick={() => { setInput(ex); setResult(null); setCopied(false); }}
+                className="liquid-glass text-cream/40 hover:text-cream
+                           text-xs px-3 py-1.5 rounded-full transition-colors
+                           font-mono">
+                example {i + 1}
               </button>
             ))}
           </div>
 
           {/* Compress button */}
-          <div style={{ padding: "16px 24px 24px" }}>
-            <button
-              onClick={handleCompress}
-              disabled={!input.trim()}
-              style={{
-                width: "100%",
-                padding: "16px",
-                background: input.trim() ? "#0F7173" : "#2D2D3F",
-                border: `1px solid ${input.trim() ? "#0F7173" : "#4A4A6A"}`,
-                borderRadius: "10px",
-                color: input.trim() ? "#fff" : "#4A4A6A",
-                fontSize: "15px",
-                fontWeight: "700",
-                cursor: input.trim() ? "pointer" : "not-allowed",
-                letterSpacing: "0.05em",
-                transition: "all 0.2s",
-              }}
-              onMouseEnter={(e) => { if (input.trim()) e.target.style.background = "#0a5557"; }}
-              onMouseLeave={(e) => { if (input.trim()) e.target.style.background = "#0F7173"; }}
-            >
-              🗿 COMPRESS PROMPT
-              <span style={{ fontSize: "12px", fontWeight: "400", marginLeft: "10px", opacity: 0.7 }}>⌘↵</span>
-            </button>
-          </div>
-        </div>
+          <button
+            onClick={handleCompress}
+            disabled={!input.trim()}
+            className="w-full py-4 rounded-xl font-grotesk text-sm uppercase tracking-widest
+                       transition-all mb-10 disabled:opacity-20 disabled:cursor-not-allowed
+                       bg-neon text-background hover:bg-neon/90"
+          >
+            🗿 compress prompt
+            <span className="ml-3 text-xs opacity-40 normal-case font-mono">⌘↵</span>
+          </button>
 
-        {/* Result */}
-        {result && (
-          <div style={{
-            background: "#2D2D3F",
-            border: "1px solid #0F7173",
-            borderRadius: "16px",
-            overflow: "hidden",
-            marginBottom: "32px",
-            animation: "fadeIn 0.3s ease",
-          }}>
-            {/* Token stats */}
-            <div style={{
-              display: "grid",
-              gridTemplateColumns: "repeat(3, 1fr)",
-              borderBottom: "1px solid #4A4A6A",
-            }}>
-              {[
-                { label: "Before", val: `~${result.inputTokens}`, sub: "tokens", color: "#C0392B" },
-                { label: "After", val: `~${result.outputTokens}`, sub: "tokens", color: "#0F7173" },
-                { label: "Saved", val: `${result.reduction}%`, sub: "reduction", color: "#E8A838" },
-              ].map(({ label, val, sub, color }) => (
-                <div key={label} style={{
-                  padding: "18px 20px",
-                  textAlign: "center",
-                  borderRight: "1px solid #4A4A6A",
-                  "&:last-child": { borderRight: "none" },
-                }}>
-                  <div style={{ fontSize: "11px", color: "#8888AA", marginBottom: "4px", textTransform: "uppercase", letterSpacing: "0.06em" }}>{label}</div>
-                  <div style={{ fontSize: "26px", fontWeight: "800", color }}>{val}</div>
-                  <div style={{ fontSize: "11px", color: "#4A4A6A" }}>{sub}</div>
-                </div>
-              ))}
-            </div>
+          {/* Result */}
+          {result && (
+            <div className="liquid-glass rounded-2xl overflow-hidden mb-16"
+                 style={{ animation: "fadeUp 0.35s ease" }}>
 
-            {/* Output */}
-            <div style={{ padding: "24px" }}>
-              <div style={{
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                marginBottom: "12px",
-              }}>
-                <span style={{ fontSize: "12px", color: "#8888AA", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.08em" }}>
-                  Caveman Prompt
-                </span>
-                <div style={{ display: "flex", gap: "8px" }}>
-                  <button
-                    onClick={() => setShowSteps(!showSteps)}
-                    style={{
-                      background: "transparent",
-                      border: "1px solid #4A4A6A",
-                      borderRadius: "6px",
-                      color: "#8888AA",
-                      fontSize: "12px",
-                      padding: "4px 12px",
-                      cursor: "pointer",
-                    }}
-                  >
-                    {showSteps ? "Hide steps" : `Show steps (${result.steps.length})`}
-                  </button>
-                  <button
-                    onClick={handleCopy}
-                    style={{
-                      background: copied ? "#0F7173" : "transparent",
-                      border: `1px solid ${copied ? "#0F7173" : "#4A4A6A"}`,
-                      borderRadius: "6px",
-                      color: copied ? "#fff" : "#8888AA",
-                      fontSize: "12px",
-                      padding: "4px 12px",
-                      cursor: "pointer",
-                      transition: "all 0.2s",
-                    }}
-                  >
-                    {copied ? "✓ Copied" : "Copy"}
-                  </button>
-                </div>
-              </div>
-
-              <div style={{
-                background: "#1A1A2E",
-                border: "1px solid #0F7173",
-                borderRadius: "10px",
-                padding: "18px",
-                fontSize: "15px",
-                color: "#F4F2EF",
-                lineHeight: "1.7",
-                fontWeight: "500",
-              }}>
-                {result.output || <span style={{ color: "#4A4A6A", fontStyle: "italic" }}>Nothing left after compression</span>}
-              </div>
-            </div>
-
-            {/* Steps breakdown */}
-            {showSteps && result.steps.length > 0 && (
-              <div style={{ padding: "0 24px 24px" }}>
-                <div style={{ fontSize: "11px", color: "#4A4A6A", fontWeight: "700", textTransform: "uppercase", letterSpacing: "0.08em", marginBottom: "10px" }}>
-                  Applied rules
-                </div>
-                {result.steps.map((step, i) => (
-                  <div key={i} style={{
-                    background: "#1A1A2E",
-                    borderRadius: "8px",
-                    padding: "12px 14px",
-                    marginBottom: "8px",
-                    borderLeft: "3px solid #E8A838",
-                  }}>
-                    <div style={{ fontSize: "11px", color: "#E8A838", fontWeight: "700", marginBottom: "6px", fontFamily: "Courier New, monospace" }}>
-                      {step.rule}
-                    </div>
-                    <div style={{ fontSize: "13px", color: "#C0392B", marginBottom: "4px", fontStyle: "italic" }}>
-                      — {step.before}
-                    </div>
-                    <div style={{ fontSize: "13px", color: "#0F7173", fontWeight: "600" }}>
-                      + {step.after}
-                    </div>
+              {/* Token stats */}
+              <div className="grid grid-cols-3 border-b border-white/10">
+                {[
+                  { label: "before", val: `~${result.inputTokens}`,  sub: "tokens",    color: "#ef4444" },
+                  { label: "after",  val: `~${result.outputTokens}`, sub: "tokens",    color: "#6FFF00" },
+                  { label: "saved",  val: `${result.reduction}%`,    sub: "reduction", color: "#f59e0b" },
+                ].map(({ label, val, sub, color }) => (
+                  <div key={label}
+                       className="py-5 text-center border-r border-white/10 last:border-r-0">
+                    <p className="font-mono text-cream/40 text-xs uppercase tracking-widest mb-1">
+                      {label}
+                    </p>
+                    <p className="font-grotesk text-3xl" style={{ color }}>{val}</p>
+                    <p className="font-mono text-cream/30 text-xs mt-1">{sub}</p>
                   </div>
                 ))}
               </div>
-            )}
-          </div>
-        )}
 
-        {/* Rules Reference */}
-        <div style={{
-          background: "#2D2D3F",
-          border: "1px solid #4A4A6A",
-          borderRadius: "16px",
-          padding: "28px",
-        }}>
-          <div style={{
-            fontSize: "13px",
-            fontWeight: "700",
-            color: "#E8A838",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            marginBottom: "20px",
-            fontFamily: "Courier New, monospace",
-          }}>
-            THE 8 CAVEMAN COMPRESSION RULES
-          </div>
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(280px, 1fr))", gap: "10px" }}>
-            {RULES.map(({ code, name, desc }) => (
-              <div key={code} style={{
-                background: "#1A1A2E",
-                borderRadius: "8px",
-                padding: "14px 16px",
-                display: "flex",
-                gap: "12px",
-                alignItems: "flex-start",
-              }}>
-                <span style={{
-                  fontFamily: "Courier New, monospace",
-                  fontSize: "12px",
-                  color: "#E8A838",
-                  fontWeight: "700",
-                  minWidth: "24px",
-                  paddingTop: "1px",
-                }}>
-                  {code}
-                </span>
-                <div>
-                  <div style={{ fontSize: "12px", fontWeight: "700", color: "#F4F2EF", marginBottom: "2px" }}>{name}</div>
-                  <div style={{ fontSize: "11px", color: "#8888AA" }}>{desc}</div>
+              {/* Output */}
+              <div className="p-5">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="font-mono text-cream/40 text-xs uppercase tracking-widest">
+                    caveman prompt
+                  </span>
+                  <div className="flex gap-2">
+                    <button
+                      onClick={() => setShowSteps(!showSteps)}
+                      className="liquid-glass text-cream/40 hover:text-cream
+                                 text-xs px-3 py-1.5 rounded-full transition-colors font-mono">
+                      {showSteps ? "hide steps" : `steps (${result.steps.length})`}
+                    </button>
+                    <button
+                      onClick={handleCopy}
+                      className={`text-xs px-3 py-1.5 rounded-full transition-colors font-mono
+                        ${copied
+                          ? "bg-neon text-background"
+                          : "liquid-glass text-cream/40 hover:text-cream"}`}>
+                      {copied ? "✓ copied" : "copy"}
+                    </button>
+                  </div>
+                </div>
+
+                <div className="liquid-glass rounded-xl p-5 text-cream text-[15px]
+                                leading-relaxed font-mono font-light">
+                  {result.output || (
+                    <span className="text-cream/30 italic">
+                      nothing left after compression
+                    </span>
+                  )}
                 </div>
               </div>
-            ))}
+
+              {/* Steps */}
+              {showSteps && result.steps.length > 0 && (
+                <div className="border-t border-white/10 p-5 space-y-4">
+                  <p className="font-mono text-cream/30 text-xs uppercase tracking-widest mb-4">
+                    applied rules
+                  </p>
+                  {result.steps.map((step, i) => (
+                    <div key={i} className="border-l-2 border-neon/50 pl-4">
+                      <p className="text-neon text-xs font-mono mb-1">{step.rule}</p>
+                      <p className="text-red-400/60 text-sm italic mb-0.5 line-through font-mono">
+                        {step.before}
+                      </p>
+                      <p className="text-cream/80 text-sm font-mono">{step.after}</p>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* Rules grid */}
+          <div id="rules">
+            <p className="font-mono text-cream/30 text-xs uppercase tracking-widest mb-6">
+              the 8 rules
+            </p>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+              {RULES.map(({ code, name, desc }) => (
+                <div key={code}
+                     className="liquid-glass rounded-xl p-4 flex gap-4
+                                hover:bg-white/5 transition-colors">
+                  <span className="text-neon font-mono text-xs pt-0.5 shrink-0">{code}</span>
+                  <div>
+                    <p className="text-cream text-sm font-mono font-medium mb-0.5">{name}</p>
+                    <p className="text-cream/40 text-xs leading-snug font-mono">{desc}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
-      </main>
+      </section>
 
       {/* Footer */}
-      <footer style={{
-        borderTop: "1px solid #2D2D3F",
-        padding: "20px 32px",
-        textAlign: "center",
-        fontSize: "12px",
-        color: "#4A4A6A",
-      }}>
-        🗿 CavePrompt — Reduce LLM token usage by 75% while preserving 100% of technical intent
+      <footer className="bg-background border-t border-white/5 px-6 py-8
+                         text-center text-cream/20 text-xs font-mono uppercase tracking-widest">
+        🗿 caveprompt — strip prompts to their semantic core
       </footer>
 
       <style>{`
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(8px); }
-          to { opacity: 1; transform: translateY(0); }
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(12px); }
+          to   { opacity: 1; transform: translateY(0); }
         }
       `}</style>
-    </div>
+    </main>
   );
 }

@@ -1,31 +1,56 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Anton&family=Condiment&display=swap');
+
 *, *::before, *::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
 }
 
-:root {
-  --obsidian: #1A1A2E;
-  --cave-teal: #0F7173;
-  --cave-amber: #E8A838;
-  --stone-dark: #2D2D3F;
-  --stone-light: #4A4A6A;
-  --off-white: #F4F2EF;
-  --muted-gray: #8888AA;
-  --light-teal: #D6ECED;
-  --light-amber: #FDF3DC;
-  --light-stone: #EEEEF4;
-  --error-red: #C0392B;
-}
-
-html, body {
+html, body, #root {
   height: 100%;
-  background: var(--obsidian);
-  color: var(--off-white);
-  font-family: 'Arial', sans-serif;
-  line-height: 1.6;
 }
 
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: var(--stone-dark); }
-::-webkit-scrollbar-thumb { background: var(--stone-light); border-radius: 3px; }
+body {
+  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+  background: #010828;
+  color: #EFF4FF;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* ── Liquid Glass ─────────────────────────────────────────── */
+.liquid-glass {
+  background: rgba(255, 255, 255, 0.01);
+  background-blend-mode: luminosity;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  border: none;
+  box-shadow: inset 0 1px 1px rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+.liquid-glass::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1.4px;
+  background: linear-gradient(
+    180deg,
+    rgba(255,255,255,0.45) 0%,
+    rgba(255,255,255,0.15) 20%,
+    rgba(255,255,255,0)    40%,
+    rgba(255,255,255,0)    60%,
+    rgba(255,255,255,0.15) 80%,
+    rgba(255,255,255,0.45) 100%
+  );
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: #010828; }
+::-webkit-scrollbar-thumb { background: #223; border-radius: 2px; }

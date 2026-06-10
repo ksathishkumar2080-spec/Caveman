@@ -9,9 +9,12 @@
     "generate": "node scripts/generate_doc.js"
   },
   "dependencies": {
+    "@tailwindcss/postcss": "^4.3.0",
     "docx": "^9.7.1",
     "next": "^15.3.3",
+    "postcss": "^8.5.15",
     "react": "^19.1.0",
-    "react-dom": "^19.1.0"
+    "react-dom": "^19.1.0",
+    "tailwindcss": "^4.3.0"
   }
 }
