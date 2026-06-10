@@ -1,7 +1,7 @@
 {
   "framework": "nextjs",
-  "installCommand": "npm ci --omit=optional",
-  "buildCommand": "npm run build",
+  "installCommand": "pnpm install --frozen-lockfile",
+  "buildCommand": "pnpm run build",
   "headers": [
     {
       "source": "/(.*)",
