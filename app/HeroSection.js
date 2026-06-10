@@ -71,7 +71,7 @@ export default function HeroSection({ onScrollToTool }) {
         </div>
 
         {/* Nav pill */}
-        <nav className="hidden md:flex liquid-glass rounded-full px-2 py-2 items-center gap-0.5">
+        <nav className="hidden md:flex liquid-glass rounded-full px-3 py-2 items-center gap-2">
           {NAV_LINKS.map((link) => (
             <a
               key={link}
