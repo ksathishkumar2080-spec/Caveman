@@ -1,5 +1,4 @@
 @import "tailwindcss";
-@import url('https://fonts.googleapis.com/css2?family=Anton&family=Condiment&display=swap');
 
 *, *::before, *::after {
   box-sizing: border-box;
@@ -7,19 +6,20 @@
   padding: 0;
 }
 
-html, body, #root {
+html, body {
   height: 100%;
 }
 
 body {
-  font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-  background: #010828;
-  color: #EFF4FF;
+  font-family: var(--font-barlow), system-ui, sans-serif;
+  background: #000;
+  color: #fff;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
 }
 
-/* ── Liquid Glass ─────────────────────────────────────────── */
+/* ── Liquid Glass ──────────────────────────────────────────── */
 .liquid-glass {
   background: rgba(255, 255, 255, 0.01);
   background-blend-mode: luminosity;
@@ -31,19 +31,19 @@ body {
   overflow: hidden;
 }
 .liquid-glass::before {
-  content: '';
+  content: "";
   position: absolute;
   inset: 0;
   border-radius: inherit;
   padding: 1.4px;
   background: linear-gradient(
     180deg,
-    rgba(255,255,255,0.45) 0%,
-    rgba(255,255,255,0.15) 20%,
-    rgba(255,255,255,0)    40%,
-    rgba(255,255,255,0)    60%,
-    rgba(255,255,255,0.15) 80%,
-    rgba(255,255,255,0.45) 100%
+    rgba(255, 255, 255, 0.45) 0%,
+    rgba(255, 255, 255, 0.15) 20%,
+    rgba(255, 255, 255, 0) 40%,
+    rgba(255, 255, 255, 0) 60%,
+    rgba(255, 255, 255, 0.15) 80%,
+    rgba(255, 255, 255, 0.45) 100%
   );
   -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
   -webkit-mask-composite: xor;
@@ -52,5 +52,5 @@ body {
 }
 
 ::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: #010828; }
-::-webkit-scrollbar-thumb { background: #223; border-radius: 2px; }
+::-webkit-scrollbar-track { background: #000; }
+::-webkit-scrollbar-thumb { background: #333; border-radius: 2px; }
