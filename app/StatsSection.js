@@ -44,13 +44,13 @@ export default function StatsSection() {
     <div className="bg-black px-4 md:px-10 lg:px-16">
 
       {/* ── Stats row ─────────────────────────────────────── */}
-      <div className="max-w-5xl mx-auto border-t border-b"
-           style={{ borderColor: "rgba(255,255,255,0.07)" }}>
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x"
-             style={{ "--tw-divide-opacity": 1, borderColor: "rgba(255,255,255,0.07)" }}>
+      <div className="max-w-5xl mx-auto border-y border-white/[0.07]">
+        <div className="grid grid-cols-1 md:grid-cols-3">
           {STATS.map(({ value, label, desc, color }) => (
-            <div key={label} className="py-10 px-8 flex flex-col gap-3"
-                 style={{ borderColor: "rgba(255,255,255,0.07)" }}>
+            <div key={label}
+                 className="py-10 px-8 flex flex-col gap-3 border-white/[0.07]
+                            border-t first:border-t-0
+                            md:border-t-0 md:border-l md:first:border-l-0">
               <p style={{ ...F, fontSize: "clamp(40px, 5vw, 64px)", fontWeight: 300,
                            letterSpacing: "-0.04em", lineHeight: 1, color }}>
                 {value}

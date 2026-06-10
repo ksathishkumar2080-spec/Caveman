@@ -1977,6 +1977,12 @@
       border-color: color-mix(in oklab, var(--color-white) 20%, transparent);
     }
   }
+  .border-white\/\[0\.07\] {
+    border-color: color-mix(in srgb, #fff 7.000000000000001%, transparent);
+    @supports (color: color-mix(in lab, red, red)) {
+      border-color: color-mix(in oklab, var(--color-white) 7.000000000000001%, transparent);
+    }
+  }
   .border-t-transparent {
     border-top-color: transparent;
   }
@@ -3382,6 +3388,12 @@
       border-bottom-left-radius: var(--radius-md);
     }
   }
+  .first\:border-t-0 {
+    &:first-child {
+      border-top-style: var(--tw-border-style);
+      border-top-width: 0px;
+    }
+  }
   .first\:border-l {
     &:first-child {
       border-left-style: var(--tw-border-style);
@@ -4379,6 +4391,18 @@
       }
     }
   }
+  .md\:border-t-0 {
+    @media (width >= 48rem) {
+      border-top-style: var(--tw-border-style);
+      border-top-width: 0px;
+    }
+  }
+  .md\:border-l {
+    @media (width >= 48rem) {
+      border-left-style: var(--tw-border-style);
+      border-left-width: 1px;
+    }
+  }
   .md\:p-12 {
     @media (width >= 48rem) {
       padding: calc(var(--spacing) * 12);
@@ -4485,6 +4509,14 @@
       &::after {
         content: var(--tw-content);
         display: none;
+      }
+    }
+  }
+  .md\:first\:border-l-0 {
+    @media (width >= 48rem) {
+      &:first-child {
+        border-left-style: var(--tw-border-style);
+        border-left-width: 0px;
       }
     }
   }

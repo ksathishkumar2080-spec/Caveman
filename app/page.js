@@ -209,7 +209,7 @@ export default function Home() {
   };
 
   const hasMessages = messages.length > 0;
-  const PANEL_H = "84vh";
+  const PANEL_H = "560px";
 
   return (
     <main className="min-h-screen bg-black text-white overflow-x-hidden" style={F}>
