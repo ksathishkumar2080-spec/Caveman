@@ -247,11 +247,11 @@ export default function Home() {
         <div className="max-w-5xl mx-auto flex gap-3">
 
           {/* ── LEFT: Chat window ─────────────────────────────── */}
-          <div className="flex-1 flex flex-col min-w-0 liquid-glass rounded-2xl overflow-hidden"
+          <div className="flex-1 flex flex-col min-w-0 liquid-glass rounded-2xl h-[500px]"
                style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
 
             {/* Chat header */}
-            <div className="px-5 py-3.5 flex items-center justify-between shrink-0"
+            <div className="px-5 py-3.5 flex items-center justify-between shrink-0 rounded-t-2xl"
                  style={{ borderBottom: "1px solid rgba(255,255,255,0.07)" }}>
               <div className="flex items-center gap-2.5">
                 <div className="w-1.5 h-1.5 rounded-full"
@@ -271,8 +271,8 @@ export default function Home() {
 
             {/* Messages */}
             <div ref={msgsRef}
-                 className="overflow-y-auto px-5 py-5 space-y-5"
-                 style={{ scrollbarWidth: "none", minHeight: "160px", maxHeight: "380px" }}>
+                 className="flex-1 overflow-y-auto px-5 py-5 space-y-5"
+                 style={{ scrollbarWidth: "none" }}>
               {!hasMessages ? (
                 <div className="py-10 flex flex-col items-center justify-center gap-4">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center liquid-glass">
@@ -302,7 +302,7 @@ export default function Home() {
             </div>
 
             {/* ── New multimodal input footer ── */}
-            <div className="shrink-0 px-4 pb-4 pt-3"
+            <div className="shrink-0 px-6 pb-5 pt-3 rounded-b-2xl"
                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
               <ChatInput
                 messages={messages}

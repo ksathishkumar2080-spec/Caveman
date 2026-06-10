@@ -196,7 +196,7 @@ export default function ChatInput({
         {showSuggestions && (
           <motion.div
             key="suggestions"
-            initial={{ opacity: 0, y: 10 }}
+            initial={{ opacity: 1, y: 0 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: 10 }}
             transition={{ duration: 0.2 }}
@@ -318,7 +318,7 @@ export default function ChatInput({
       </div>
 
       {/* Hint */}
-      <p className="text-center text-[9px]" style={{ ...F, color: "rgba(255,255,255,0.1)" }}>
+      <p className="text-right text-[9px] pr-1" style={{ ...F, color: "rgba(255,255,255,0.1)" }}>
         ⌘↵ to send · attach images, PDFs up to 25 MB
       </p>
     </div>
