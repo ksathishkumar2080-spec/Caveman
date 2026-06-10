@@ -1,0 +1,43 @@
+/* [project]/app/globals.css [app-client] (css) */
+*, :before, :after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --obsidian: #1a1a2e;
+  --cave-teal: #0f7173;
+  --cave-amber: #e8a838;
+  --stone-dark: #2d2d3f;
+  --stone-light: #4a4a6a;
+  --off-white: #f4f2ef;
+  --muted-gray: #88a;
+  --light-teal: #d6eced;
+  --light-amber: #fdf3dc;
+  --light-stone: #eeeef4;
+  --error-red: #c0392b;
+}
+
+html, body {
+  background: var(--obsidian);
+  height: 100%;
+  color: var(--off-white);
+  font-family: Arial, sans-serif;
+  line-height: 1.6;
+}
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--stone-dark);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--stone-light);
+  border-radius: 3px;
+}
+
+/*# sourceMappingURL=app_globals_0yg4wg8.css.map*/

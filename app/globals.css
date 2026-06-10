@@ -1,0 +1,31 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  --obsidian: #1A1A2E;
+  --cave-teal: #0F7173;
+  --cave-amber: #E8A838;
+  --stone-dark: #2D2D3F;
+  --stone-light: #4A4A6A;
+  --off-white: #F4F2EF;
+  --muted-gray: #8888AA;
+  --light-teal: #D6ECED;
+  --light-amber: #FDF3DC;
+  --light-stone: #EEEEF4;
+  --error-red: #C0392B;
+}
+
+html, body {
+  height: 100%;
+  background: var(--obsidian);
+  color: var(--off-white);
+  font-family: 'Arial', sans-serif;
+  line-height: 1.6;
+}
+
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-track { background: var(--stone-dark); }
+::-webkit-scrollbar-thumb { background: var(--stone-light); border-radius: 3px; }

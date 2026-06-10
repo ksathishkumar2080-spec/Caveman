@@ -1,19 +1,17 @@
 {
   "name": "caveman",
   "version": "1.0.0",
-  "description": "Generates the CavePrompt research & scope document (.docx)",
-  "main": "scripts/generate_doc.js",
+  "description": "CavePrompt — LLM token compression tool",
   "scripts": {
+    "dev": "next dev -p 5000 -H 0.0.0.0",
+    "build": "next build",
+    "start": "next start",
     "generate": "node scripts/generate_doc.js"
   },
-  "repository": {
-    "type": "git",
-    "url": "http://local_proxy@127.0.0.1:32937/git/ksathishkumar2080-spec/Caveman"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
   "dependencies": {
-    "docx": "^9.7.1"
+    "docx": "^9.7.1",
+    "next": "^15.3.3",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0"
   }
 }
