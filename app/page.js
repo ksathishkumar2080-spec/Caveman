@@ -97,12 +97,25 @@ function AiBubble({ result, onCopy, copied }) {
         <div className="liquid-glass rounded-2xl rounded-bl-sm p-4"
              style={{ border: "1px solid rgba(74,222,128,0.18)", background: "rgba(74,222,128,0.03)" }}>
           <p className="text-[13px] leading-[1.75] font-light mb-3"
-             style={{ ...F, color: "rgba(255,255,255,0.82)" }}>
-            {result.output || (
-              <span style={{ color: "rgba(255,255,255,0.28)", fontStyle: "italic" }}>
-                Nothing remains after optimisation.
-              </span>
-            )}
+             style={{ ...F, color: "rgba(255,255,255,0.82)", whiteSpace: "pre-line" }}>
+            {result.output
+              ? result.output.split('\n').map((line, i) => {
+                  // Highlight PCA label prefix (BRAIN:, Co:, Method:, etc.)
+                  const colonIdx = line.indexOf(':');
+                  if (colonIdx > 0 && colonIdx < 14 && !/^[a-z]/.test(line)) {
+                    const label = line.slice(0, colonIdx + 1);
+                    const value = line.slice(colonIdx + 1);
+                    return (
+                      <span key={i} style={{ display: 'block' }}>
+                        <span style={{ color: "rgba(74,222,128,0.7)", fontWeight: 500 }}>{label}</span>
+                        <span>{value}</span>
+                      </span>
+                    );
+                  }
+                  return <span key={i} style={{ display: 'block' }}>{line}</span>;
+                })
+              : <span style={{ color: "rgba(255,255,255,0.28)", fontStyle: "italic" }}>Nothing remains after optimisation.</span>
+            }
           </p>
           <div className="flex items-center gap-1.5 pt-2.5"
                style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
