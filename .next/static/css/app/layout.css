@@ -1385,6 +1385,9 @@
   .max-w-20 {
     max-width: calc(var(--spacing) * 20);
   }
+  .max-w-\[34ch\] {
+    max-width: 34ch;
+  }
   .max-w-\[85\%\] {
     max-width: 85%;
   }
@@ -2339,6 +2342,9 @@
   .py-8 {
     padding-block: calc(var(--spacing) * 8);
   }
+  .py-9 {
+    padding-block: calc(var(--spacing) * 9);
+  }
   .py-10 {
     padding-block: calc(var(--spacing) * 10);
   }
@@ -2377,6 +2383,9 @@
   }
   .pt-6 {
     padding-top: calc(var(--spacing) * 6);
+  }
+  .pt-16 {
+    padding-top: calc(var(--spacing) * 16);
   }
   .pt-24 {
     padding-top: calc(var(--spacing) * 24);
@@ -2530,6 +2539,9 @@
   }
   .text-\[11px\] {
     font-size: 11px;
+  }
+  .text-\[12\.5px\] {
+    font-size: 12.5px;
   }
   .text-\[12px\] {
     font-size: 12px;
@@ -4522,6 +4534,11 @@
       align-items: center;
     }
   }
+  .md\:gap-8 {
+    @media (width >= 48rem) {
+      gap: calc(var(--spacing) * 8);
+    }
+  }
   .md\:divide-x {
     @media (width >= 48rem) {
       :where(& > :not(:last-child)) {
@@ -4573,6 +4590,16 @@
   .md\:px-16 {
     @media (width >= 48rem) {
       padding-inline: calc(var(--spacing) * 16);
+    }
+  }
+  .md\:py-28 {
+    @media (width >= 48rem) {
+      padding-block: calc(var(--spacing) * 28);
+    }
+  }
+  .md\:pt-24 {
+    @media (width >= 48rem) {
+      padding-top: calc(var(--spacing) * 24);
     }
   }
   .md\:text-right {

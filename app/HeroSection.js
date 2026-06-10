@@ -145,7 +145,7 @@ export default function HeroSection({ onScrollToTool }) {
           style={{ fontFamily: "var(--font-inter)" }}
         >
           <span className="text-white">
-            Akaike's token engine strips every prompt to its semantic core —
+            Akaike's token engine strips every prompt down to its semantic core,
             slashing API costs, accelerating response time, and keeping your intent intact.
           </span>{" "}
           <span className="text-white/45">

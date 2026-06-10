@@ -14,14 +14,14 @@ const EXAMPLES = [
 ];
 
 const RULES = [
-  { code: "R1", name: "Drop articles",        desc: "Remove a, an, the — zero semantic loss" },
+  { code: "R1", name: "Drop articles",        desc: "Remove a, an, the → zero semantic loss" },
   { code: "R2", name: "Drop politeness",       desc: "please, could you, I'd like → removed" },
   { code: "R3", name: "Drop scaffolding",      desc: "'In this task', 'For context' → removed" },
   { code: "R4", name: "Compress verb phrases", desc: "'provide me with a list of' → list:" },
   { code: "R5", name: "Abbreviate tech",       desc: "auth, config, docs, DB, JS, TS…" },
   { code: "R6", name: "Collapse redundancy",   desc: "Repeated constraints → stripped" },
   { code: "R7", name: "Flatten conditionals",  desc: "'if not too much trouble' → removed" },
-  { code: "R8", name: "Preserve critical",     desc: "Negations, numbers, formats — kept" },
+  { code: "R8", name: "Preserve critical",     desc: "Negations, numbers, formats → kept" },
 ];
 
 const F = { fontFamily: "var(--font-inter)" };
