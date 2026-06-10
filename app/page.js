@@ -11,14 +11,61 @@ const F = { fontFamily: "var(--font-inter)" };
 const VIDEO_SRC =
   "https://d8j0ntlcm91z4.cloudfront.net/user_38xzZboKViGWJOttwIXH07lWA1P/hf_20260429_114316_1c7889ad-2885-410e-b493-98119fee0ddb.mp4";
 
+/* ─── Token saver sidebar ──────────────────────────────────── */
+function StatsSidebar({ totalIn, totalOut, calls }) {
+  const saved = totalIn - totalOut;
+  const pct   = totalIn > 0 ? Math.round((1 - totalOut / totalIn) * 100) : 0;
+  return (
+    <div className="shrink-0 w-40 liquid-glass rounded-2xl p-4 flex flex-col gap-3"
+         style={{ border: "1px solid rgba(74,222,128,0.14)" }}>
+      <div className="flex items-center gap-1.5">
+        <Zap size={10} strokeWidth={2} style={{ color: "rgba(74,222,128,0.7)" }} />
+        <span className="text-[9px] uppercase tracking-[0.16em]"
+              style={{ ...F, color: "rgba(255,255,255,0.28)" }}>Token Saver</span>
+      </div>
+
+      <div>
+        <p className="text-[30px] font-semibold leading-none"
+           style={{ ...F, color: "rgba(74,222,128,0.92)" }}>{saved}</p>
+        <p className="text-[10px] mt-0.5"
+           style={{ ...F, color: "rgba(255,255,255,0.28)" }}>tokens saved</p>
+      </div>
+
+      <div className="rounded-xl px-3 py-2"
+           style={{ background: "rgba(74,222,128,0.08)", border: "1px solid rgba(74,222,128,0.1)" }}>
+        <p className="text-[22px] font-semibold leading-none"
+           style={{ ...F, color: "rgba(74,222,128,0.88)" }}>{pct}%</p>
+        <p className="text-[9px] mt-0.5"
+           style={{ ...F, color: "rgba(74,222,128,0.45)" }}>avg reduction</p>
+      </div>
+
+      <div className="space-y-1.5 pt-2"
+           style={{ borderTop: "1px solid rgba(255,255,255,0.07)" }}>
+        {[["in", totalIn], ["out", totalOut], ["runs", calls]].map(([label, val]) => (
+          <div key={label} className="flex justify-between items-center">
+            <span className="text-[10px]"
+                  style={{ ...F, color: "rgba(255,255,255,0.25)" }}>{label}</span>
+            <span className="text-[10px] font-medium"
+                  style={{ ...F, color: "rgba(255,255,255,0.5)" }}>{val}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 /* ─── Message bubbles ──────────────────────────────────────── */
 function UserBubble({ text }) {
   return (
     <div className="flex justify-end">
       <div
         className="max-w-[88%] rounded-2xl rounded-br-sm px-4 py-3
-                   text-white/75 text-[13px] leading-[1.7] font-light"
-        style={{ ...F, background: "rgba(255,255,255,0.07)", border: "1px solid rgba(255,255,255,0.09)" }}
+                   text-[13px] leading-[1.7] font-light"
+        style={{ ...F,
+          background: "rgba(99,102,241,0.13)",
+          border: "1px solid rgba(99,102,241,0.25)",
+          color: "rgba(165,180,252,0.88)"
+        }}
       >
         {text}
       </div>
@@ -48,7 +95,7 @@ function AiBubble({ result, onCopy, copied }) {
 
         {/* bubble */}
         <div className="liquid-glass rounded-2xl rounded-bl-sm p-4"
-             style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
+             style={{ border: "1px solid rgba(74,222,128,0.18)", background: "rgba(74,222,128,0.03)" }}>
           <p className="text-[13px] leading-[1.75] font-light mb-3"
              style={{ ...F, color: "rgba(255,255,255,0.82)" }}>
             {result.output || (
@@ -134,6 +181,15 @@ export default function Home() {
 
   const hasMessages = messages.length > 0;
 
+  const totalStats = messages.reduce((acc, m) => {
+    if (m.type === "ai") {
+      acc.totalIn  += m.result.inputTokens;
+      acc.totalOut += m.result.outputTokens;
+      acc.calls    += 1;
+    }
+    return acc;
+  }, { totalIn: 0, totalOut: 0, calls: 0 });
+
   return (
     <main className="relative min-h-screen text-white overflow-x-hidden" style={F}>
 
@@ -177,7 +233,9 @@ export default function Home() {
           id="tool"
           className="px-4 md:px-8 py-10 flex-1 flex flex-col items-center justify-center"
         >
-          <div className="w-full max-w-[504px] mx-auto flex flex-col min-w-0 liquid-glass rounded-2xl h-[345px]"
+          <div className="flex gap-4 items-start justify-center w-full">
+
+          <div className="flex-1 max-w-[504px] flex flex-col min-w-0 liquid-glass rounded-2xl h-[345px]"
                style={{ border: "1px solid rgba(255,255,255,0.08)" }}>
 
             {/* Chat header */}
@@ -242,6 +300,17 @@ export default function Home() {
               />
             </div>
           </div>
+
+          {/* Stats sidebar — appears on first compression */}
+          {hasMessages && (
+            <StatsSidebar
+              totalIn={totalStats.totalIn}
+              totalOut={totalStats.totalOut}
+              calls={totalStats.calls}
+            />
+          )}
+
+          </div>{/* end flex row wrapper */}
         </section>
 
         {/* ── Footer ── */}
