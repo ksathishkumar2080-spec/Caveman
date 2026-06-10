@@ -4,6 +4,7 @@ import { useState, useCallback, useRef, useEffect } from "react";
 import { compress } from "../lib/compress";
 import HeroSection from "./HeroSection";
 import { ArrowUp, Copy, Check, Zap, ChevronDown } from "lucide-react";
+import StatsSection from "./StatsSection";
 
 const EXAMPLES = [
   "Could you please help me write a cold outreach email to a potential enterprise client in the SaaS industry who recently visited our pricing page?",
@@ -215,6 +216,9 @@ export default function Home() {
 
       {/* ══ HERO ════════════════════════════════════════════════ */}
       <HeroSection onScrollToTool={scrollToTool} />
+
+      {/* ══ STATS / INFO ════════════════════════════════════════ */}
+      <StatsSection />
 
       {/* ══ CHAT SECTION ════════════════════════════════════════ */}
       <section

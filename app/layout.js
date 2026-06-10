@@ -17,8 +17,8 @@ const instrumentSerif = Instrument_Serif({
 });
 
 export const metadata = {
-  title: "Sales Support — Akaike",
-  description: "AI-powered sales support tool by Akaike. Compress, optimize, and ship sales prompts with precision.",
+  title: "Akaike Prompt Token Saver",
+  description: "Cut LLM token usage by up to 70% without losing intent. Akaike's prompt compression engine for sales teams.",
 };
 
 export default function RootLayout({ children }) {

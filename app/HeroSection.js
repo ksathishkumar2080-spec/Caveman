@@ -106,7 +106,7 @@ export default function HeroSection({ onScrollToTool }) {
       >
         <p className="text-white/50 text-[11px] font-medium tracking-[0.2em] mb-6 uppercase"
            style={{ fontFamily: "var(--font-inter)" }}>
-          Akaike · Sales Intelligence
+          Akaike · Prompt Token Saver
         </p>
 
         <h1
@@ -119,7 +119,7 @@ export default function HeroSection({ onScrollToTool }) {
           }}
           className="text-white"
         >
-          Sell smarter. Reply faster.
+          Cut tokens by 70%.
         </h1>
         <h1
           style={{
@@ -131,7 +131,7 @@ export default function HeroSection({ onScrollToTool }) {
             color: "rgba(255,255,255,0.45)",
           }}
         >
-          Close more, say less.
+          Keep every ounce of intent.
         </h1>
       </div>
 
@@ -145,11 +145,11 @@ export default function HeroSection({ onScrollToTool }) {
           style={{ fontFamily: "var(--font-inter)" }}
         >
           <span className="text-white">
-            Akaike's sales engine strips every prompt to its precise intent —
-            cutting response time, reducing cost, and keeping your reps in flow.
+            Akaike's token engine strips every prompt to its semantic core —
+            slashing API costs, accelerating response time, and keeping your intent intact.
           </span>{" "}
           <span className="text-white/45">
-            Every message optimised. Every conversation ready to close.
+            Same output quality. A fraction of the tokens.
           </span>
         </p>
 
@@ -160,7 +160,7 @@ export default function HeroSection({ onScrollToTool }) {
                      hover:shadow-[0_0_32px_4px_rgba(255,255,255,0.18)]"
           style={{ fontFamily: "var(--font-inter)" }}
         >
-          Try the tool
+          Start saving tokens
         </button>
 
         <div className="flex items-center gap-2">
