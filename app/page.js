@@ -3,15 +3,9 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import { compress } from "../lib/compress";
 import HeroSection from "./HeroSection";
-import { ArrowUp, Copy, Check, Zap, ChevronDown } from "lucide-react";
+import { Copy, Check, Zap, ChevronDown } from "lucide-react";
 import StatsSection from "./StatsSection";
-
-const EXAMPLES = [
-  "Could you please help me write a cold outreach email to a potential enterprise client in the SaaS industry who recently visited our pricing page?",
-  "I would like you to create a follow-up message for a prospect who attended our product demo last week but hasn't responded to my previous two emails.",
-  "Please help me draft a professional response to a pricing objection from a mid-market client who is comparing us against our main competitor.",
-  "In this task, I need you to summarize the key talking points for a discovery call with a CTO at a fintech company interested in our data analytics platform.",
-];
+import ChatInput from "./ChatInput";
 
 const RULES = [
   { code: "R1", name: "Drop articles",        desc: "Remove a, an, the → zero semantic loss" },
@@ -158,12 +152,11 @@ function RulesSidebar() {
 
 /* ─── Main page ────────────────────────────────────────────── */
 export default function Home() {
-  const [input, setInput]        = useState("");
-  const [messages, setMessages]  = useState([]);
+  const [messages, setMessages]   = useState([]);
+  const [attachments, setAttachments] = useState([]);
   const [copiedIdx, setCopiedIdx] = useState(null);
-  const toolRef     = useRef(null);
-  const msgsRef     = useRef(null);
-  const textareaRef = useRef(null);
+  const toolRef = useRef(null);
+  const msgsRef = useRef(null);
 
   const scrollToTool = () => toolRef.current?.scrollIntoView({ behavior: "smooth" });
 
@@ -172,28 +165,12 @@ export default function Home() {
       msgsRef.current.scrollTop = msgsRef.current.scrollHeight;
   }, [messages]);
 
-  const growTextarea = (ta) => {
-    ta.style.height = "auto";
-    ta.style.height = Math.min(ta.scrollHeight, 150) + "px";
-  };
-
-  const handleInput = (e) => {
-    growTextarea(e.target);
-    setInput(e.target.value);
-  };
-
-  const handleSend = useCallback(() => {
+  const handleSend = useCallback(({ input }) => {
     const text = input.trim();
     if (!text) return;
     const result = compress(text);
     setMessages(prev => [...prev, { type: "user", text }, { type: "ai", result }]);
-    setInput("");
-    if (textareaRef.current) textareaRef.current.style.height = "auto";
-  }, [input]);
-
-  const handleKey = (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === "Enter") handleSend();
-  };
+  }, []);
 
   const handleCopy = async (result, idx) => {
     await navigator.clipboard.writeText(result.output);
@@ -201,15 +178,7 @@ export default function Home() {
     setTimeout(() => setCopiedIdx(null), 2000);
   };
 
-  const loadExample = (ex) => {
-    setInput(ex);
-    requestAnimationFrame(() => {
-      if (textareaRef.current) { growTextarea(textareaRef.current); textareaRef.current.focus(); }
-    });
-  };
-
   const hasMessages = messages.length > 0;
-  const PANEL_H = "560px";
 
   return (
     <main className="min-h-screen bg-black text-white overflow-x-hidden" style={F}>
@@ -232,8 +201,8 @@ export default function Home() {
           Akaike · Prompt Optimizer
         </p>
 
-        {/* ── Two-column chat layout ─────────────────────────── */}
-        <div className="max-w-5xl mx-auto flex gap-3" style={{ height: PANEL_H }}>
+        {/* ── Two-column layout ──────────────────────────────── */}
+        <div className="max-w-5xl mx-auto flex gap-3">
 
           {/* ── LEFT: Chat window ─────────────────────────────── */}
           <div className="flex-1 flex flex-col min-w-0 liquid-glass rounded-2xl overflow-hidden"
@@ -246,7 +215,7 @@ export default function Home() {
                 <div className="w-1.5 h-1.5 rounded-full"
                      style={{ background: "rgba(255,255,255,0.2)" }} />
                 <span className="text-[12px] font-medium"
-                      style={{ ...F, color: "rgba(255,255,255,0.65)" }}>Sales Support</span>
+                      style={{ ...F, color: "rgba(255,255,255,0.65)" }}>Prompt Optimizer</span>
                 <span className="text-[11px]"
                       style={{ ...F, color: "rgba(255,255,255,0.2)" }}>· Akaike</span>
               </div>
@@ -260,11 +229,10 @@ export default function Home() {
 
             {/* Messages */}
             <div ref={msgsRef}
-                 className="flex-1 overflow-y-auto px-5 py-5 space-y-5"
-                 style={{ scrollbarWidth: "none" }}>
+                 className="overflow-y-auto px-5 py-5 space-y-5"
+                 style={{ scrollbarWidth: "none", minHeight: "160px", maxHeight: "380px" }}>
               {!hasMessages ? (
-                /* Empty state */
-                <div className="h-full flex flex-col items-center justify-center gap-4">
+                <div className="py-10 flex flex-col items-center justify-center gap-4">
                   <div className="w-10 h-10 rounded-full flex items-center justify-center liquid-glass">
                     <Zap size={16} strokeWidth={1.5}
                          style={{ color: "rgba(255,255,255,0.22)" }} />
@@ -291,57 +259,20 @@ export default function Home() {
               )}
             </div>
 
-            {/* ── Compact input footer ── */}
-            <div className="shrink-0 px-3 pb-3 pt-2"
+            {/* ── New multimodal input footer ── */}
+            <div className="shrink-0 px-4 pb-4 pt-3"
                  style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}>
-
-              {/* chips + meta row */}
-              <div className="flex items-center gap-1.5 mb-2">
-                <span className="text-[9px] uppercase tracking-[0.12em] shrink-0"
-                      style={{ ...F, color: "rgba(255,255,255,0.16)" }}>Try:</span>
-                {EXAMPLES.map((ex, i) => (
-                  <button key={i} onClick={() => loadExample(ex)}
-                    className="text-[9px] px-2 py-0.5 rounded-full transition-all duration-150 shrink-0"
-                    style={{ ...F, color: "rgba(255,255,255,0.25)", border: "1px solid rgba(255,255,255,0.07)" }}
-                    onMouseEnter={e => { e.currentTarget.style.color = "rgba(255,255,255,0.55)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.18)"; }}
-                    onMouseLeave={e => { e.currentTarget.style.color = "rgba(255,255,255,0.25)"; e.currentTarget.style.borderColor = "rgba(255,255,255,0.07)"; }}>
-                    {i + 1}
-                  </button>
-                ))}
-                <span className="ml-auto text-[9px] shrink-0"
-                      style={{ ...F, color: "rgba(255,255,255,0.12)" }}>
-                  {input.trim() ? `~${Math.ceil(input.trim().split(/\s+/).length * 1.3)} tokens` : "⌘↵ to send"}
-                </span>
-              </div>
-
-              {/* textarea + send */}
-              <div className="flex items-end gap-2 rounded-xl px-3 py-2"
-                   style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.08)" }}>
-                <textarea
-                  ref={textareaRef}
-                  value={input}
-                  onChange={handleInput}
-                  onKeyDown={handleKey}
-                  placeholder="Paste your sales prompt…"
-                  rows={1}
-                  className="flex-1 bg-transparent outline-none resize-none text-[13px] leading-[1.6] font-light"
-                  style={{ ...F, color: "rgba(255,255,255,0.78)", minHeight: "20px", maxHeight: "100px" }}
-                />
-                <button onClick={handleSend} disabled={!input.trim()}
-                  className="shrink-0 w-6 h-6 rounded-full flex items-center justify-center transition-all duration-200"
-                  style={{
-                    background: input.trim() ? "#fff" : "rgba(255,255,255,0.07)",
-                    color: input.trim() ? "#000" : "rgba(255,255,255,0.18)",
-                    cursor: input.trim() ? "pointer" : "not-allowed",
-                  }}>
-                  <ArrowUp size={11} strokeWidth={2.5} />
-                </button>
-              </div>
+              <ChatInput
+                messages={messages}
+                attachments={attachments}
+                setAttachments={setAttachments}
+                onSend={handleSend}
+              />
             </div>
           </div>
 
           {/* ── RIGHT: Rules sidebar ──────────────────────────── */}
-          <div className="w-60 lg:w-64 shrink-0 hidden md:block">
+          <div className="w-60 lg:w-64 shrink-0 hidden md:flex flex-col">
             <RulesSidebar />
           </div>
         </div>
