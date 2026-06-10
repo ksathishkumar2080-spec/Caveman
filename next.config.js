@@ -7,6 +7,9 @@ const nextConfig = {
     formats: ["image/avif", "image/webp"],
     minimumCacheTTL: 60,
   },
+  ...(process.env.NODE_ENV === "development" && {
+    allowedDevOrigins: ["*.replit.dev", "*.pike.replit.dev", "*.repl.co"],
+  }),
 };
 
 module.exports = nextConfig;
