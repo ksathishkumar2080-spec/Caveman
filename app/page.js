@@ -189,6 +189,48 @@ export default function Home() {
       {/* ══ STATS / INFO ════════════════════════════════════════ */}
       <StatsSection />
 
+      {/* ══ TOKEN COUNTER ═══════════════════════════════════════ */}
+      {(() => {
+        const aiMsgs = messages.filter(m => m.type === "ai");
+        const totalIn  = aiMsgs.reduce((s, m) => s + (m.result?.inputTokens  ?? 0), 0);
+        const totalOut = aiMsgs.reduce((s, m) => s + (m.result?.outputTokens ?? 0), 0);
+        const saved    = totalIn - totalOut;
+        const pct      = totalIn > 0 ? Math.round((saved / totalIn) * 100) : 0;
+        const active   = aiMsgs.length > 0;
+        return (
+          <div className="bg-black px-5 md:px-10 lg:px-16 pb-6">
+            <div className="max-w-5xl mx-auto">
+              <div className="flex items-center gap-6 rounded-xl px-5 py-3.5 flex-wrap"
+                   style={{ border: "1px solid rgba(255,255,255,0.06)", background: "rgba(255,255,255,0.02)" }}>
+                <div className="flex items-center gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full"
+                       style={{ background: active ? "rgba(134,239,172,0.7)" : "rgba(255,255,255,0.12)",
+                                boxShadow: active ? "0 0 6px rgba(134,239,172,0.4)" : "none",
+                                transition: "all .4s" }} />
+                  <span className="text-[10px] uppercase tracking-[0.16em]"
+                        style={{ ...F, color: "rgba(255,255,255,0.2)" }}>
+                    Session token counter
+                  </span>
+                </div>
+                <div className="flex items-center gap-5 ml-auto flex-wrap">
+                  {[
+                    { label: "Tokens in",   val: totalIn.toLocaleString(),  color: "rgba(255,255,255,0.45)" },
+                    { label: "Tokens out",  val: totalOut.toLocaleString(), color: "rgba(255,255,255,0.45)" },
+                    { label: "Saved",       val: saved > 0 ? saved.toLocaleString() : "—", color: "rgba(134,239,172,0.8)" },
+                    { label: "Reduction",   val: active ? `${pct}%` : "—",  color: "rgba(134,239,172,0.8)" },
+                  ].map(({ label, val, color }) => (
+                    <div key={label} className="flex items-baseline gap-1.5">
+                      <span className="text-[10px]" style={{ ...F, color: "rgba(255,255,255,0.18)" }}>{label}</span>
+                      <span className="text-[13px] font-light tabular-nums" style={{ ...F, color }}>{val}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
+
       {/* ══ CHAT SECTION ════════════════════════════════════════ */}
       <section
         ref={toolRef}
