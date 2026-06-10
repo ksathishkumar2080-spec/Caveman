@@ -70,32 +70,6 @@ export default function HeroSection({ onScrollToTool }) {
           </span>
         </div>
 
-        {/* Nav pill */}
-        <nav className="hidden md:flex liquid-glass rounded-full px-3 py-2 items-center gap-2">
-          {NAV_LINKS.map((link) => (
-            <a
-              key={link}
-              href={`#${link.toLowerCase()}`}
-              onClick={link === "TOOL" ? (e) => { e.preventDefault(); onScrollToTool?.(); } : undefined}
-              className="text-[11px] font-medium tracking-[0.12em] text-white/80 hover:text-white
-                         px-5 py-1.5 rounded-full transition-colors duration-200"
-              style={{ fontFamily: "var(--font-inter)" }}
-            >
-              {link}
-            </a>
-          ))}
-        </nav>
-
-        {/* CTA */}
-        <a
-          href="#tool"
-          onClick={(e) => { e.preventDefault(); onScrollToTool?.(); }}
-          className="liquid-glass rounded-full px-5 py-2.5 text-[11px] font-medium
-                     tracking-[0.12em] text-white/80 hover:text-white transition-colors duration-200"
-          style={{ fontFamily: "var(--font-inter)" }}
-        >
-          GET STARTED
-        </a>
       </header>
 
       {/* ── Hero headline ─────────────────────────────────────── */}
